@@ -1,0 +1,106 @@
+https://i.ytimg.com/sb/q1fxh3Y_Y1M/
+storyboard3_L2/
+M2.jpg?
+sqp=-oaymwENSDfyq4qpAwVwAcABAaLzl_8DBgiJiPqABg==
+&sigh=rs%24AOn4CLCIMZAkaYyBePNGV4A9IVZdC3E9Rw
+
+/** 12520376628425320917 */
+self.document = self;
+self.window = self;
+var ytcfg = {
+    d: function() {
+        return window.yt && yt.config_ || ytcfg.data_ || (ytcfg.data_ = {})
+    },
+    get: function(k, o) {
+        return k in ytcfg.d() ? ytcfg.d()[k] : o
+    },
+    set: function() {
+        var a = arguments;
+        if (a.length > 1) ytcfg.d()[a[0]] = a[1];
+        else
+            for (var k in a[0]) ytcfg.d()[k] = a[0][k]
+    }
+};
+ytcfg.set({
+    "EXPERIMENT_FLAGS": {
+        "kevlar_enable_convert_endpoint_to_url_oneplatform_migration": true,
+        "web_include_display_mode_killswitch": true,
+        "kevlar_enable_record_notification_interaction_oneplatform_migration": true
+    },
+    "INNERTUBE_API_KEY": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
+    "INNERTUBE_API_VERSION": "v1",
+    "INNERTUBE_CLIENT_NAME": "WEB",
+    "INNERTUBE_CLIENT_VERSION": "2.20210304.08.01",
+    "INNERTUBE_CONTEXT": {
+        "client": {
+            "clientName": "WEB",
+            "clientVersion": "2.20210304.08.01"
+        }
+    },
+    "INNERTUBE_CONTEXT_CLIENT_NAME": 1,
+    "INNERTUBE_CONTEXT_CLIENT_VERSION": "2.20210304.08.01",
+    "LATEST_ECATCHER_SERVICE_TRACKING_PARAMS": {
+        "client.name": "WEB"
+    }
+});
+importScripts('https:\/\/www.youtube.com\/s\/desktop\/fe7279a7\/jsbin\/serviceworker-kevlar-appshell.vflset\/serviceworker-kevlar-appshell.js');
+
+{
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "description": "생활용품부터 전자제품까지, 4만원 이하의 저렴한 가격임에도 불구하고\n기대 이상의 만족감을 줬던 제품 다섯종류를 소개해 드릴게요!\n\n재미있게 봐 주세요 ^^\n\n⏰Time Stamp⏰\n00:00 - 들어가기 전에\n00:39 - 3,000원대 생활용품 1\n03:41 - 3,000원대 생활용품 2\n05:16 - 10,000원대 생활용품\n08:34 - 30,000원대 전자제품\n10:48 - 30,000원대 전자제품 2\n14:05 - 마치며...\n\n*카페 주소 : https://cafe.naver.com/techmong\n*비즈니스 문의 : clauds@naver.com\n*인스타그램 : https://www.instagram.com/techmong/",
+    "duration": "PT920S",
+    "embedUrl": "https://www.youtube.com/embed/q1fxh3Y_Y1M",
+    "interactionCount": "591362",
+    "name": "4만원 이하! 직접 써보고 추천드리는 가성비 생활용품&전자제품 5종",
+    "thumbnailUrl": ["https://i.ytimg.com/vi/q1fxh3Y_Y1M/maxresdefault.jpg"],
+    "uploadDate": "2021-02-06",
+    "genre": "Science & Technology",
+    "author": "테크몽 Techmong"
+}
+
+var W = function(a, b, c, d) {
+        var e = Eb(1);
+        T(e, "e", a);
+        c && T(e, "li", c);
+        d && T(e, "cv", d);
+        b && T(e, "bgai", b);
+        Bb(e.toString())
+    },
+    Hb = function() {
+        void 0 === Fb && (Fb = Gb())
+    },
+    Fb, Gb = function() {
+        var a = window.GoogleTyFxhY;
+        if (!a) return W(13), null;
+        if (0 == a.length) return W(1), null;
+        a = a.shift();
+        return (a._scs_ || a._cv_) && a._bgu_ && a._bgp_ ? a : (W(2), null)
+    },
+    Cb = function(a, b) {
+        return function() {
+                try {
+                    return a.apply(this, arguments)
+                } catch (B) {
+                    if (!(1 <= Ib.count)) {
+                        var c = B,
+                            d = Eb(3);
+                        new Hb;
+                        var e = (Fb || null)._scs_;
+                        e && T(d, "bgai", e);
+                        T(d, "c", b);
+                        var f = c.toString();
+
+ytp-tooltip-text-wrapper
+
+ytp-progress-bar-container
+
+ytp-timed-markers-container : mouseover event base.js:942
+
+base.js:6086, 6058, 7347, 1036 
+
+6062
+
+ytp-exp-chapter-hover-effect
+
+ytp-hover-progress-light
