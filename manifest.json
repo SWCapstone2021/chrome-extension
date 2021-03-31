@@ -32,7 +32,10 @@
             "description": "Opens hello.html"
         }
     },
-
+    // "web_accessible_resources": [{
+    //     "resources": ["./images/good.png"],
+    //     "matches": ["https://www.youtube.com/*"]
+    // }],
     "content_scripts": [{
         "all_frames": true,
         "exclude_matches": [

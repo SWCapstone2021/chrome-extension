@@ -1,3 +1,5 @@
+## 생활 코딩 보면서 정리한 자료
+
 ### 2강
 
 1. alert("Hello");
@@ -90,7 +92,7 @@
         var allKeys = Object.keys(items);
         console.log(allKeys);
     });
-    ```
+   ```
 
 3. Communicate with other components [Chrome API passing message link](https://developer.chrome.com/docs/extensions/mv3/messaging/)
 
@@ -164,3 +166,4 @@
 ## 크롬 익스텐션 참고
 
 1. improve youtube [link](https://github.com/code4charity/YouTube-Extension)
+
