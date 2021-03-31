@@ -46,3 +46,9 @@
 Maintainer : 김수연
 
 Contributor : 강한결, 남희수, 오승민, 허범수
+
+
+
+## License
+
+MIT License
