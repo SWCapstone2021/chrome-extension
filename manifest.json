@@ -1,0 +1,43 @@
+{
+    "name": "FindU",
+    "version": "1.0",
+    "description": "Search word that you are looking for and find it inside the video",
+    "permissions": [
+        "declarativeContent",
+        "notifications",
+        "storage",
+        "tabs",
+        "*://*.youtube.com/watch?*"
+    ],    
+    "browser_action": {
+        "default_popup": "./pages/popup.html"
+    },
+    "web_accessible_resources": [
+        "scripts/*",
+        "pages/*"
+    ],
+    "content_scripts": [
+        {
+            "js": [
+                "./scripts/main.js"
+            ],
+            "matches": [
+                "https://*.youtube.com/*"
+            ],
+            "css": [
+                "./inject.css"
+            ]
+        }
+    ],
+    "commands": {
+        "search-bar": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+F",
+                "mac": "Command+Shift+F"
+            },
+            "description": "show search bar"
+        }
+    },
+    "icons": {},
+    "manifest_version": 2
+}

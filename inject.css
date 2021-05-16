@@ -1,0 +1,71 @@
+.SearchTitle {
+  color: rgb(133, 133, 133);
+  margin-bottom: 10px;
+  margin-top: 20px;
+  font-weight: 500;
+  font-size: large;
+}
+.SearchBar{
+  width:80%;
+  height:30px;
+  border-radius: 10px;
+  border-color: #2c3e50;
+  border-width: 2px;
+  margin-right: 5%;
+  margin-left: 2%;
+}
+.SearchButton{
+  width:10%;
+  height: 30px;
+  border-radius: 10px;
+}
+
+.sideBarDiv {
+  width: 100px;
+  flex-direction: column;
+  color: rgb(133, 133, 133);
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-weight: 500;
+}
+.sideButtonSearch{
+  flex-direction: column;
+  width: 50px;
+  height: 50px;
+  border-color: #45526c;
+  border-radius: 3px;
+  border-width: 1px;
+  margin-top: 10%;
+  margin-left: 10%;
+  margin-right:10%;
+  margin-bottom: 10%;
+  background-color:#f8f5f1;
+  align-items: center;
+  justify-content: center;
+}
+.sideButtonSummary{
+  width: 50px;
+  height: 50px;
+  border-color: #45526c;
+  border-radius: 3px;
+  border-width: 1px;
+  margin-left: 10%;
+  margin-right:10%;
+  margin-bottom: 10%;
+  background-color:#f8f5f1;
+  align-items: center;
+  justify-content: center;
+}
+.sideButtonSetting{
+  width: 50px;
+  height: 50px;
+  border-color: #45526c;
+  border-radius: 3px;
+  border-width: 1px;
+  margin-left: 10%;
+  margin-right:10%;
+  margin-bottom: 10%;
+  background-color:#f8f5f1;
+  align-items: center;
+  justify-content: center;
+}
