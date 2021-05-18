@@ -1,28 +1,57 @@
-.id {
-  width: 300px;
-  height: 50px;
-  margin-right: 26px;
+
+.solo_logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  
+}
+.Logo_name {
+  width: 148px;
+  height: 68px;
+  align-items: center;
+  justify-content: center;
+}
+.email {
+  font-family: SegoeUI;
+  font-size: 30px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.9;
+  letter-spacing: normal;
+  text-align: left;
+  color: #707070;
+}
+.btns{
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+.id  {
+  width: 200px;
+  height: 40px;
+  margin-left: 5%;
   border: solid 1px #707070;
   background-color: #ffffff;
 }
-.pw {
-  width: 300px;
+.btn{
+  width: 100px;
   height: 50px;
-  margin-right: 26px;
-  border: solid 1px #707070;
-  background-color: #ffffff;
-}
-.register {
-  width: 120px;
-  height: 50px;
+  margin: 34px 40px 0 0;
+  padding: 6px 15px 4px;
   border-radius: 10px;
-  border: solid 1px #707070;
-  background-color: #f25066;
+  border: solid 1px #3d98c0;
+  background-color: #3d98c0;
 }
-.login {
+.txt{
   width: 120px;
-  height: 50px;
-  border-radius: 10px;
-  border: solid 1px #707070;
-  background-color: #f25066;
+  font-family: SegoeUI;
+  font-size: 30px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-align: left;
+  color: #ffffff;
 }

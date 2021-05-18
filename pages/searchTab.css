@@ -1,15 +1,37 @@
-.t{
-    text-align: right;
-    font-size: 10px;
+
+.subject{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 50px;
+    margin-top: 40px;
+    align-items: center;
+    justify-content: center;
 }
-.t:hover {
-    color:#df0000;
+.solo_logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  align-items: center;
+justify-content: center;
 }
-.addList
-{
-    padding: 5px 0px 15px 5px;
-    border-bottom: 1px solid #efefef;
+.SearchTab {
+  align-items: center;
+  justify-content: center;
+  width: 153px;
+  height: 40px;
+  margin-left: 30px;
+  font-family: SegoeUI;
+  font-size: 30px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.33;
+  letter-spacing: 1.2px;
+  text-align: left;
+  color: #3d98c0;
 }
+
 ul.mylist, ol.mylist {
     list-style: none;
     margin: 0px;
