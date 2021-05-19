@@ -1,0 +1,16 @@
+.title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+}
+.txt_add{
+    align-items: center;
+    justify-items: center;
+    width:250%;
+}
+.btn_add{
+    margin-left: 5%;
+    align-items: center;
+    justify-items: center;
+}

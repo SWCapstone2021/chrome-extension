@@ -1,9 +1,10 @@
+
 document.getElementById("btn_add").onclick = function () {
-    if (document.getElementById("txt_add").value != "") {
-
+    var keyword = document.getElementById("txt_add").value;
+    if (keyword!= "") {
+        //keyword 보내고 결과 받아야!!
+        console.log(keyword)
         
-        localStorage.setItem(a, document.getElementById("txt_add").value);
-
     } else {
         alert("검색어가 없습니다!");
     }

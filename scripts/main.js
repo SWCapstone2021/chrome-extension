@@ -159,25 +159,29 @@ async function main(loc) {
         sideDiv.appendChild(sideTab);
     }
 }
+main(loc)
 
-main(loc);
 
-var insideShow=false;
+//ctrl+shift+F 한번에 show 두번에 hide
+var insideTab = document.createElement('iframe');
+insideTab.classList.add('insideTab');
+insideTab.id = 'innerTab';
+insideTab.width="0px";
+insideTab.height="0px";
+var search_tab_loc = document.querySelector("#container .html5-video-player");
+search_tab_loc.appendChild(insideTab);
+
 chrome.runtime.onMessage.addListener(gotMessage);
 function gotMessage(message,sender,sendResponse){
-    console.log(insideShow)
-    if(!insideShow){
-        insideTab.id = 'search_frame';
+    console.log(message)
+    if(message=="insideTrue"){
         insideTab.width = "250px";
         insideTab.height = "300px";
         insideTab.style = "top:10%;left:60%;position:absolute;z-index:99999;overflow:hidden;";
         insideTab.src = "chrome-extension://" + chrome.runtime.id + "/pages/innerSearch.html"
-        var search_tab_loc = document.querySelector("#container .html5-video-player");
-        search_tab_loc.appendChild(insideTab);
-        insideShow=true;
     }
     else{
-        insideShow=false;
-        
+        insideTab.width = "0px";
+        insideTab.height = "0px";
     }
 }
