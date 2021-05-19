@@ -43,21 +43,10 @@ chrome.commands.onCommand.addListener(function (command) {
 });
 
 chrome.runtime.onMessage.addListener((msg, sender, resp) => {
-    if (msg.command == "insideTrue") {
-        console.log("hi")
-        firebase.firestore.collection("users").doc("amelia9981@naver.com").get().then((doc) => {
-            if (doc.exists) {
-                console.log("Document data:", doc.data());
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-        }).catch((error) => {
-            console.log("Error getting document:", error);
-        });
+    if (msg.command == "fetch") {
+       
     }
     if (msg.command == "post") {
-        var domain = msg.data.domain;
 
     }
 })
