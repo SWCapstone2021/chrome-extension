@@ -3,6 +3,7 @@
     "version": "1.0",
     "description": "Search word that you are looking for and find it inside the video",
     "permissions": [
+        "activeTab",
         "declarativeContent",
         "notifications",
         "storage",

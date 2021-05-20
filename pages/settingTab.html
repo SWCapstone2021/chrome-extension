@@ -7,8 +7,42 @@
 </head>
 
 <body>
-    
+    <div class="subject">
+        <img src="./img/solo_logo.svg" class="solo_logo">
+        <span><b class="SearchTab"> Setting Tab </b></span>
+    </div>
+
+    <div class="optionBody" style="margin:10px">
+        <div class="current option" style="display: flex; flex-direction: column; align-items: flex-start;">
+            <p>
+                Search Option : <span id="selected_search">Not Selected Yet</span>
+            </p>
+            <p>
+                UI Option : <span id="selected_ui">Not Selected Yet</span>
+            </p>
+
+        </div>
+
+        <div style="display: flex; justify-content: flex-start;">
+            <div style="display: flex; flex-direction: column;">
+                <label for="search">Choose a Search Option</label>
+                <label for="ui">Choose a UI Option</label>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+                <select id="search">
+                    <option value="Keyword">Keyword</option>
+                    <option value="Related Keyword">Related Keyword</option>
+                    <option value="Query">Query</option>
+                </select>
+                <select id="ui">
+                    <option value="sidebar">sidebar</option>
+                    <option value="search tab">search tab</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
 </body>
-<script src="searchTab.js"></script>
+<script src="setting.js"></script>
 
 </html>

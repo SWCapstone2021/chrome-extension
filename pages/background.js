@@ -1,3 +1,4 @@
+// var console = chrome.extension.getBackgroundPage().console;
 let color = '#3aa757';
 
 chrome.runtime.onInstalled.addListener(() => {
@@ -30,6 +31,7 @@ var background = {
     },
 
     debug: function(message, sender, reply) {
+        console.log("eere")
         chrome.storage.sync.set({ debug: message.debug }, function() {
             console.log("Set key to ", message.debug);
         });
