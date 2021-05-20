@@ -74,13 +74,13 @@ var loc = window.location.href;
 
 async function sendData(loc){
     if(loc.substring(0,29)=="https://www.youtube.com/watch"){
-        var videoID = loc.substring(32, loc.length)
-        $.get("http://202.30.30.3:5678/api/scripts", function (data) {
-            console.log("Load was performed.");
-        });
-    }
-    if(loc.substring(0,44)=="https://www.youtube.com/results?search_query"){
-
+        videoID = loc.split('v=')[1].split('&')[0];
+        console.log(videoID)
+        await $.post('https://202.30.30.3:5678/scripts-load',
+            { video_id: videoID },
+            function(){
+                alert("success")
+            });
     }
 }
 
@@ -99,7 +99,8 @@ const helpers = {
     }
 };
 
-function main(loc) {
+async function main(loc) {
+    sendData(loc)
     if (loc.substring(0, 44) =='https://www.youtube.com/results?search_query'){
         var title = document.querySelectorAll('#metadata-line');
         for (i = 0; i < title.length; i++) {
@@ -156,12 +157,15 @@ insideTab.classList.add('insideTab');
 insideTab.id = 'innerTab';
 insideTab.width="0px";
 insideTab.height="0px";
+insideTab.src=""
 var search_tab_loc = document.querySelector("#container .html5-video-player");
 var tri_loc = document.querySelector("#container .html5-video-player .ytp-timed-markers-container")
 search_tab_loc.appendChild(insideTab);
 var tri = document.createElement('img');
 var triUrl=chrome.runtime.getURL("../pages/img/triangle.svg")
 tri.src = triUrl
+tri.height="5px";
+tri.width="5px";
 chrome.runtime.onMessage.addListener(gotMessage);
 function gotMessage(message,sender,sendResponse){
     console.log(message)
