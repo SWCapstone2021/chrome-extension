@@ -3,6 +3,7 @@
     "version": "1.0",
     "description": "Search word that you are looking for and find it inside the video",
     "permissions": [
+        "activeTab",
         "declarativeContent",
         "notifications",
         "storage",
@@ -18,23 +19,21 @@
         "pages/*"
     ],
     "background": {
-        "page":"./pages/background.html",
+        "page": "./pages/background.html",
         "persistent": false
     },
-    "content_scripts": [
-        {
-            "js": [
-                "axios.min.js",
-                "jquery.min.js", "./scripts/main.js"                
-            ],
-            "matches": [
-                "https://*.youtube.com/*"
-            ],
-            "css": [
-                "./inject.css"
-            ]
-        }
-    ],
+    "content_scripts": [{
+        "js": [
+            "axios.min.js",
+            "jquery.min.js", "./scripts/main.js"
+        ],
+        "matches": [
+            "https://*.youtube.com/*"
+        ],
+        "css": [
+            "./inject.css"
+        ]
+    }],
     "commands": {
         "search-bar": {
             "suggested_key": {

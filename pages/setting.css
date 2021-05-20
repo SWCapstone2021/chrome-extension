@@ -1,0 +1,78 @@
+.subject {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 50px;
+    margin-top: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.solo_logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    align-items: center;
+    justify-content: center;
+}
+
+.SearchTab {
+    align-items: center;
+    justify-content: center;
+    width: 153px;
+    height: 40px;
+    margin-left: 30px;
+    font-family: SegoeUI;
+    font-size: 30px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.33;
+    letter-spacing: 1.2px;
+    text-align: left;
+    color: #3d98c0;
+}
+
+ul.mylist,
+ol.mylist {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    max-width: 250px;
+    width: 100%;
+}
+
+.addList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.txt_add {
+    width: 200%;
+}
+
+.btn_add {
+    width: 10%;
+}
+
+ul.mylist li,
+ol.mylist li {
+    padding: 5px 0px 5px 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #efefef;
+    font-size: 12px;
+}
+
+ul.mylist li:before,
+ol.mylist li:before {
+    content: ">";
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0px 5px 6px 0px;
+}
+
+ul.mylist li:last-child,
+ol.mylist li:last-child {
+    border-bottom: 0px;
+}
