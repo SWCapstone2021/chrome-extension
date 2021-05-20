@@ -8,10 +8,10 @@ document.getElementById("btn_add").onclick = function () {
         if (keyword != "") {
             //keyword 보내고 결과 받아야!!
             getData("GHxUB4_MIqw", keyword);
-            var temp = ["0:55", "1:34", "3:12"];
+            var temp = [["0:55","blablabla"], ["1:34","blablabla"], ["3:12","blablabla"]];
             for (var i = 0; i < temp.length; i++)
-                myList[0].innerHTML += "<li>" + temp[i] + "</li>";
-            myList[0].innerHTML += "<li><a href='https://www.youtube.com/watch?v=Ba19NCNJehg&t=55s' target='_parent'>0:55</a></li>";
+                myList[0].innerHTML += "<li>" + temp[i][0] + "<p>"+temp[i][1]+ "</p></li>";
+            myList[0].innerHTML += "<li><><a href='https://www.youtube.com/watch?v=Ba19NCNJehg&t=55s' target='_parent'>0:55</a></li>";
         } else {
             alert("검색어가 없습니다!");
         }
