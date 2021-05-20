@@ -9,7 +9,7 @@
         "tabs",
         "*://*.youtube.com/watch?*",
         "*://202.30.30.3:5678/*"
-    ],    
+    ],
     "browser_action": {
         "default_popup": "./pages/popup.html"
     },
@@ -18,23 +18,21 @@
         "pages/*"
     ],
     "background": {
-        "page":"./pages/background.html",
+        "page": "./pages/background.html",
         "persistent": false
     },
-    "content_scripts": [
-        {
-            "js": [
-                "axios.min.js",
-                "jquery.min.js", "./scripts/main.js"                
-            ],
-            "matches": [
-                "https://*.youtube.com/*"
-            ],
-            "css": [
-                "./inject.css"
-            ]
-        }
-    ],
+    "content_scripts": [{
+        "js": [
+            "axios.min.js",
+            "jquery.min.js", "./scripts/main.js"
+        ],
+        "matches": [
+            "https://*.youtube.com/*"
+        ],
+        "css": [
+            "./inject.css"
+        ]
+    }],
     "commands": {
         "search-bar": {
             "suggested_key": {
