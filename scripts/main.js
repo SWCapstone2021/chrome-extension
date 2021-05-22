@@ -1,9 +1,3 @@
-var head = document.querySelector('head')
-var meta = document.createElement('meta')
-meta.httpEquiv = "Content-Security-Policy"
-meta.content = "upgrade-insecure-requests"
-head.append(meta)
-
 var sideDiv = document.createElement('div');
 var sideTab = document.createElement('iframe');
 sideTab.id = 'tab_frame'
@@ -19,7 +13,9 @@ sideBarDiv.style.width = '70px';
 
 var sideButtonSearch = document.createElement('button');
 sideButtonSearch.id = 'sideButtonSearch';
-sideButtonSearch.innerHTML = '<?xml version="1.0" encoding="iso-8859-1"?><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"><g>	<g>		<path d="M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474 c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323 		c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848 S326.847,409.323,225.474,409.323z"/>	</g></g><g>	<g>		<path d="M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328 			c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z"/></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>'
+var searchimg = document.createElement('img');
+searchimg.src = chrome.runtime.getURL("../pages/img/loupe.svg")
+sideButtonSearch.appendChild(searchimg)
 sideButtonSearch.addEventListener('click', () => {
     if (searchTabShown) {
         searchTabShown = false;
@@ -124,34 +120,49 @@ const helpers = {
                 href = window.location.href;
                 callback(href);
             }
-        }, 1);
+        }, 111);
     },
     isVideoURL(url) {
         return url.indexOf(`https://${window.location.host}/watch`) === 0;
     }
 };
 
-async function main(loc) {
-    console.log("before sendData()")
-    sendData(loc)
-    console.log("after sendData()")
+
+function main(loc) {
+    var position = document.querySelector('ytd-two-column-search-results-renderer')
+    console.log(position)
+    var currentstate = document.readyState;
+    console.log(currentstate + loc)
     if (loc.substring(0, 44) == 'https://www.youtube.com/results?search_query') {
         var title = document.querySelectorAll('#metadata-line');
+        console.log(title)
         for (i = 0; i < title.length; i++) {
             var node = document.createElement("SPAN");
             var textnode = document.createTextNode(`키워드 ${i}`);
-            //var imagenode = document.createElement("img")
-            //imagenode.src = imgURL;
             node.style.color = "red";
             node.appendChild(textnode);
-            //node.append(imagenode)
             title[i].appendChild(node);
         }
+        chrome.runtime.reload()
+
     }
+
+
+    /*if (loc.substring(0, 44) =='https://www.youtube.com/results?search_query' && position){
+        var title = position.querySelectorAll('#metadata-line');
+        console.log(title)
+        for (i = 0; i < title.length; i++) {
+            var node = document.createElement("SPAN");
+            var textnode = document.createTextNode(`키워드 ${i}`);
+            node.style.color = "red";
+            node.appendChild(textnode);
+            title[i].appendChild(node);
+        }
+    }*/
     if (loc.substring(0, 29) == 'https://www.youtube.com/watch') {
         sideButtonSearch.classList.add('sideButtonSearch');
         sideButtonSummary.classList.add('sideButtonSummary');
-        sideButtonSetting.classList.add('sideButtonSetting');;
+        sideButtonSetting.classList.add('sideButtonSetting');
         (function insertEl() {
             var side = document.evaluate(
                 '/html/body/ytd-app/div/ytd-page-manager/ytd-watch-flexy/div[5]',
@@ -181,11 +192,29 @@ async function main(loc) {
         ).singleNodeValue;
         side_tab_loc.insertBefore(sideDiv, side_tab_loc.firstChild);
         sideDiv.appendChild(sideTab);
+        renderTime(200);
     }
 }
-
 helpers.onUrlChange(main);
 
+var code = document.getElementsByClassName("video-stream");
+var wholeT = code[0].duration;
+wholeT = parseInt(wholeT)
+console.log(timeToString(wholeT)); // 분 & 초로 변경
+
+var resultT = []
+
+function renderTime(time) {
+    var current = time * 100 / wholeT; //타임스탬프찍은거 비율 계산
+    //삼각형 추가부분 넣기
+    var tri_loc = document.querySelector("#container .html5-video-player .ytp-timed-markers-container")
+    var tri = document.createElement('img');
+    var triUrl = chrome.runtime.getURL("../pages/img/triangle.svg")
+    tri.src = triUrl
+    tri.style = "bottom:5%; position: absolute; z-index: 99999; overflow: hidden;"
+    tri_loc.appendChild(tri)
+    console.log(current);
+}
 
 //ctrl+shift+F 한번에 show 두번에 hide
 var insideTab = document.createElement('iframe');
@@ -193,15 +222,8 @@ insideTab.classList.add('insideTab');
 insideTab.id = 'innerTab';
 insideTab.width = "0px";
 insideTab.height = "0px";
-insideTab.src = ""
 var search_tab_loc = document.querySelector("#container .html5-video-player");
-var tri_loc = document.querySelector("#container .html5-video-player .ytp-timed-markers-container")
-search_tab_loc.appendChild(insideTab);
-var tri = document.createElement('img');
-var triUrl = chrome.runtime.getURL("../pages/img/triangle.svg")
-tri.src = triUrl
-tri.height = "5px";
-tri.width = "5px";
+
 chrome.runtime.onMessage.addListener(gotMessage);
 
 function gotMessage(message, sender, sendResponse) {
@@ -211,13 +233,36 @@ function gotMessage(message, sender, sendResponse) {
         insideTab.height = "300px";
         insideTab.style = "top:10%;left:60%;position:absolute;z-index:99999;overflow:hidden;";
         insideTab.src = "chrome-extension://" + chrome.runtime.id + "/pages/innerSearch.html";
-        tri.style = "left: 20%; bottom:14.3px;position: absolute; z-index: 99999; overflow: hidden;"
-        tri_loc.appendChild(tri)
     } else if (message == "insideFalse") {
         insideTab.width = "0px";
         insideTab.height = "0px";
     } else if (message == "overlayOn") {
-        tri.style = "left: 20%; bottom:14.3px;position:absolute;z-index:99999;overflow:hidden;"
-        search_tab_loc.appendChild(tri)
+        renderTime(200)
     }
+}
+
+
+
+
+//분 -> 초 & 초->분
+function stringToTime(timeString) {
+    timeString = timeString.replace("s", "").replace("m", "").replace("h", "");
+    var timeSecond = 0;
+    weight = 0.1;
+    var _tl = timeString.length;
+    for (var i = 0; i < _tl; i++) {
+        if (i != 0 && i % 2 == 0) { weight *= 6; } else { weight *= 10; }
+        timeSecond += weight * Number(timeString[_tl - i - 1]);
+        //console.log (timeSecond + ' ' + timeString[_tl-i-1]);
+    }
+    return timeSecond;
+}
+
+function timeToString(timeSecond) {
+    if (timeSecond < 60)
+        return "00:" + (timeSecond % 60);
+    else if (timeSecond < 3600)
+        return parseInt(timeSecond / 60) + ":" + (timeSecond % 60); //' + "s";
+    else
+        return parseInt(timeSecond / 3600) + ":" + parseInt((timeSecond % 3600) / 60) + ":" + (timeSecond % 60);
 }
