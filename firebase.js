@@ -1,52 +1,46 @@
-var firebaseConfig={
-    apiKey:"AIzaSyA0pL64xTd1VMWhLJULY4NJR2wKhDa0Z5c",
-    authDomain:"apcfindu.firebaseapp.com",
-    projectId:"apcfindu",
-    storageBucket:"apcfindu.appspot.com",
-    messagingSenderId:"599927951202",
-    appId:"1: 599927951202: web: a6f4cb8a43e202452fe63b",
-    measurementId:"G - LKDKLT4ET4"
+async function init_firebase() {
+    let firebase_config_path_src = 'config/firebase_config.json'
+    let firebase_config_path = chrome.extension.getURL(firebase_config_path_src);
+    firebase_config = await $.getJSON(firebase_config_path);
+    console.log(firebase_config_path)
+    firebase.initializeApp(firebase_config);
 }
 
-firebase.initializeApp(firebaseConfig)
-console.log(firebase)
-
-var shown = false;
-chrome.commands.onCommand.addListener(function (command) {
-    // Call 'update' with an empty properties object to get access to the current
-    // tab (given to us in the callback function).
-    chrome.tabs.update({}, function (tab) {
-        var loc = tab.url;
-        if (command == 'search-bar' && loc.substring(0, 29) == 'https://www.youtube.com/watch' && !shown) {
-            //send message to main.js
-            chrome.tabs.sendMessage(tab.id, "insideTrue");
-            shown = true;
-            //get data from firebase 
-            /*var db = firebase.firestore().collection("users").doc("amelia9981@naver.com");
-            db.get().then((doc) => {
-                if (doc.exists) {
-                    console.log("Document data:", doc.data());
-                } else {
-                    // doc.data() will be undefined in this case
-                    console.log("No such document!");
-                }
-            }).catch((error) => {
-                console.log("Error getting document:", error);
-            });*/
+function check_login() {
+    console.log("state = unknown (until the callback is invoked)");
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            console.log("state = definitely signed in");
+            if (!("indexedDB" in window)) {
+                alert("This browser doesn't support IndexedDB");
+            } else {
+                let indexdb = window.indexedDB.open("firebaseLocalStorageDb", 1);
+                indexdb.onsuccess = function() {
+                    let db = indexdb.result;
+                    let transaction = db.transaction("firebaseLocalStorage", "readwrite");
+                    let storage = transaction.objectStore("firebaseLocalStorage");
+                    let request = storage.getAll();
+                    request.onsuccess = function(event) {
+                        sendBackground("logIn", request.result[0]);
+                    };
+                };
+            }
+        } else {
+            console.log("state = definitely signed out");
+            sendBackground("logOut", "logout")
         }
-        else if (shown) {
-            chrome.tabs.sendMessage(tab.id, "insideFalse");
-            shown = false
-        }
-
     });
-});
+}
 
-chrome.runtime.onMessage.addListener((msg, sender, resp) => {
-    if (msg.command == "fetch") {
-       
-    }
-    if (msg.command == "post") {
+function sendBackground(fn, msg) {
+    chrome.runtime.sendMessage({ fn: fn, text: msg }, function(response) {
+        console.log("Response: ", response);
+    });
+}
 
-    }
-})
+async function init() {
+    await init_firebase();
+    check_login();
+}
+
+init();

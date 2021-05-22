@@ -104,13 +104,13 @@ var searchShown = false;
 var SideBarShown = false;
 var loc = window.location.href;
 
-async function sendData(loc){
-    if(loc.substring(0,29)=="https://www.youtube.com/watch"){
+async function sendData(loc) {
+    if (loc.substring(0, 29) == "https://www.youtube.com/watch") {
+        console.log("In sendData()")
         videoID = loc.split('v=')[1].split('&')[0];
         console.log(videoID)
-        await $.post('https://202.30.30.3:5678/scripts-load',
-            { video_id: videoID },
-            function(){
+        await $.post('https://202.30.30.3:5678/scripts-load', { "video_id": videoID },
+            function() {
                 alert("success")
             });
     }
@@ -132,8 +132,10 @@ const helpers = {
 };
 
 async function main(loc) {
+    console.log("before sendData()")
     sendData(loc)
-    if (loc.substring(0, 44) =='https://www.youtube.com/results?search_query'){
+    console.log("after sendData()")
+    if (loc.substring(0, 44) == 'https://www.youtube.com/results?search_query') {
         var title = document.querySelectorAll('#metadata-line');
         for (i = 0; i < title.length; i++) {
             var node = document.createElement("SPAN");
@@ -189,17 +191,17 @@ helpers.onUrlChange(main);
 var insideTab = document.createElement('iframe');
 insideTab.classList.add('insideTab');
 insideTab.id = 'innerTab';
-insideTab.width="0px";
-insideTab.height="0px";
-insideTab.src=""
+insideTab.width = "0px";
+insideTab.height = "0px";
+insideTab.src = ""
 var search_tab_loc = document.querySelector("#container .html5-video-player");
 var tri_loc = document.querySelector("#container .html5-video-player .ytp-timed-markers-container")
 search_tab_loc.appendChild(insideTab);
 var tri = document.createElement('img');
 var triUrl = chrome.runtime.getURL("../pages/img/triangle.svg")
 tri.src = triUrl
-tri.height="5px";
-tri.width="5px";
+tri.height = "5px";
+tri.width = "5px";
 chrome.runtime.onMessage.addListener(gotMessage);
 
 function gotMessage(message, sender, sendResponse) {
