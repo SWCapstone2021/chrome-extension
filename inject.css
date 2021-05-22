@@ -9,7 +9,7 @@
   margin-top: 20px;
   font-weight: 500;
 }
-.sideButtonSearch{
+.sideButton{
   width: 50px;
   height: 50px;
   border-color: #90CAF9;
@@ -23,42 +23,10 @@
   align-items: center;
   justify-content: center;
 }
-.sideButtonSearch:hover{
-  background-color:#90CAF9;
-}
-.sideButtonSummary{
-  width: 50px;
-  height: 50px;
-  border-color: #90CAF9;
-  border-radius: 10px;
-  border-width: 2px;
-  margin-left: 10%;
-  margin-right:10%;
-  margin-bottom: 10%;
-  background-color:#FFFFFF;
-  align-items: center;
-  justify-content: center;
-}
-.sideButtonSummary:hover{
+.sideButton:hover{
   background-color: #90CAF9;
 }
 
-.sideButtonSetting{
-  width: 50px;
-  height: 50px;
-  border-color: #90CAF9;
-  border-radius: 10px;
-  border-width: 2px;
-  margin-left: 10%;
-  margin-right:10%;
-  margin-bottom: 10%;
-  background-color:#FFFFFF;
-  align-items: center;
-  justify-content: center;
-}
-.sideButtonSetting:hover{
-  background-color: #90CAF9;
-}
 .insideTab{
   background-color:rgba(0,0,0,0.7);
   border-radius: 10px;
