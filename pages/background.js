@@ -5,11 +5,15 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({ color });
     console.log('Default background color set to %cgreen', `color: ${color}`);
 });
-
+/*
+chrome.webNavigation.onCompleted.addListener(function () {
+    alert("This is my favorite website!");
+}, { url: [{ urlMatches: 'https://*.youtube.com/*' }] });
+alert("This is my favorite website!");
 // chrome.webNavigation.onCompleted.addListener(function() {
 //     alert("this is my favorite website!");
 // }, { url: [{ urlMatches: 'https://www.google.com/' }] });
-
+*/
 var background = {
 
     user: "",

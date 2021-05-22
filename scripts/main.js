@@ -3,7 +3,7 @@ var meta = document.createElement('meta')
 meta.httpEquiv = "Content-Security-Policy"
 meta.content = "upgrade-insecure-requests"
 head.append(meta)
-
+console.log('hel')
 var sideDiv = document.createElement('div');
 var sideTab = document.createElement('iframe');
 sideTab.id = 'tab_frame'
@@ -124,33 +124,50 @@ const helpers = {
                 href = window.location.href;
                 callback(href);
             }
-        }, 1);
+        }, 111);
     },
     isVideoURL(url) {
         return url.indexOf(`https://${window.location.host}/watch`) === 0;
     }
 };
 
-async function main(loc) {
-    sendData(loc)
-    if (loc.substring(0, 44) =='https://www.youtube.com/results?search_query'){
-        var title = document.querySelectorAll('#metadata-line');
+
+function main(loc) {
+    var position = document.querySelector('ytd-two-column-search-results-renderer')
+    console.log(position)
+    var currentstate = document.readyState;
+    console.log(currentstate + loc)
+    if (loc.substring(0, 44) == 'https://www.youtube.com/results?search_query') {
+            var title = document.querySelectorAll('#metadata-line');
+            console.log(title)
+            for (i = 0; i < title.length; i++) {
+                var node = document.createElement("SPAN");
+                var textnode = document.createTextNode(`키워드 ${i}`);
+                node.style.color = "red";
+                node.appendChild(textnode);
+                title[i].appendChild(node);
+            }
+            chrome.runtime.reload()
+
+    }
+    
+    
+    /*if (loc.substring(0, 44) =='https://www.youtube.com/results?search_query' && position){
+        var title = position.querySelectorAll('#metadata-line');
+        console.log(title)
         for (i = 0; i < title.length; i++) {
             var node = document.createElement("SPAN");
             var textnode = document.createTextNode(`키워드 ${i}`);
-            //var imagenode = document.createElement("img")
-            //imagenode.src = imgURL;
             node.style.color = "red";
             node.appendChild(textnode);
-            //node.append(imagenode)
             title[i].appendChild(node);
         }
-    }
+    }*/
     if (loc.substring(0, 29) == 'https://www.youtube.com/watch') {
         sideButtonSearch.classList.add('sideButtonSearch');
         sideButtonSummary.classList.add('sideButtonSummary');
-        sideButtonSetting.classList.add('sideButtonSetting');;
-        (function insertEl() {
+        sideButtonSetting.classList.add('sideButtonSetting');
+        (function insertEl(){
             var side = document.evaluate(
                 '/html/body/ytd-app/div/ytd-page-manager/ytd-watch-flexy/div[5]',
                 document,
@@ -179,11 +196,30 @@ async function main(loc) {
         ).singleNodeValue;
         side_tab_loc.insertBefore(sideDiv, side_tab_loc.firstChild);
         sideDiv.appendChild(sideTab);
-    }
+    };
+    
 }
-
 helpers.onUrlChange(main);
 
+var code = document.getElementsByClassName("video-stream");
+var wholeT=code[0].duration;
+wholeT = parseInt(wholeT)
+console.log(timeToString(wholeT));// 분 & 초로 변경
+
+var resultT =[]
+function renderTime(time){
+    var current = time * 100 / wholeT;//타임스탬프찍은거 비율 계산
+    //삼각형 추가부분 넣기
+    var tri_loc = document.querySelector("#container .html5-video-player .ytp-timed-markers-container")
+    var tri = document.createElement('img');
+    var triUrl = chrome.runtime.getURL("../pages/img/triangle.svg")
+    tri.src = triUrl
+    tri.style.left= current;
+    tri.style = "bottom:14.3px;position: absolute; z-index: 99999; overflow: hidden;"
+    tri_loc.appendChild(tri)
+    console.log(current);
+}
+renderTime(10);
 
 //ctrl+shift+F 한번에 show 두번에 hide
 var insideTab = document.createElement('iframe');
@@ -193,13 +229,7 @@ insideTab.width="0px";
 insideTab.height="0px";
 insideTab.src=""
 var search_tab_loc = document.querySelector("#container .html5-video-player");
-var tri_loc = document.querySelector("#container .html5-video-player .ytp-timed-markers-container")
-search_tab_loc.appendChild(insideTab);
-var tri = document.createElement('img');
-var triUrl = chrome.runtime.getURL("../pages/img/triangle.svg")
-tri.src = triUrl
-tri.height="5px";
-tri.width="5px";
+
 chrome.runtime.onMessage.addListener(gotMessage);
 
 function gotMessage(message, sender, sendResponse) {
@@ -209,8 +239,6 @@ function gotMessage(message, sender, sendResponse) {
         insideTab.height = "300px";
         insideTab.style = "top:10%;left:60%;position:absolute;z-index:99999;overflow:hidden;";
         insideTab.src = "chrome-extension://" + chrome.runtime.id + "/pages/innerSearch.html";
-        tri.style = "left: 20%; bottom:14.3px;position: absolute; z-index: 99999; overflow: hidden;"
-        tri_loc.appendChild(tri)
     } else if (message == "insideFalse") {
         insideTab.width = "0px";
         insideTab.height = "0px";
@@ -218,4 +246,29 @@ function gotMessage(message, sender, sendResponse) {
         tri.style = "left: 20%; bottom:14.3px;position:absolute;z-index:99999;overflow:hidden;"
         search_tab_loc.appendChild(tri)
     }
+}
+
+
+
+
+//분 -> 초 & 초->분
+function stringToTime(timeString) {
+    timeString = timeString.replace("s", "").replace("m", "").replace("h", "");
+    var timeSecond = 0;
+    weight = 0.1;
+    var _tl = timeString.length;
+    for (var i = 0; i < _tl; i++) {
+        if (i != 0 && i % 2 == 0) { weight *= 6; } else { weight *= 10; }
+        timeSecond += weight * Number(timeString[_tl - i - 1]);
+        //console.log (timeSecond + ' ' + timeString[_tl-i-1]);
+    }
+    return timeSecond;
+}
+function timeToString(timeSecond) {
+    if (timeSecond < 60)
+        return "00:" + (timeSecond % 60);
+    else if (timeSecond < 3600)
+        return parseInt(timeSecond / 60) + ":" + (timeSecond % 60);//' + "s";
+    else
+        return parseInt(timeSecond / 3600) + ":" + parseInt((timeSecond % 3600) / 60) + ":" + (timeSecond % 60);
 }

@@ -8,7 +8,7 @@
         "notifications",
         "storage",
         "tabs",
-        "*://*.youtube.com/watch?*",
+        "*://*.youtube.com/*",
         "https://202.30.30.3:5678/*"
     ],    
     "browser_action": {
@@ -23,6 +23,7 @@
         "persistent": false
     },
     "content_scripts": [{
+        "all_frames": true,
         "js": [
             "axios.min.js",
             "jquery.min.js", "./scripts/main.js"
@@ -32,7 +33,8 @@
         ],
         "css": [
             "./inject.css"
-        ]
+        ],
+        "run_at": "document_end"
     }],
     "commands": {
         "search-bar": {
