@@ -1,8 +1,28 @@
 <!DOCTYPE html>
-<html>
-  <head>
-  </head>
-  <body>
-    <iframe  frameBorder="0" scrolling ="no" width= "400px" height="600px" src="https://apcfindu.web.app/auth/login"></iframe>
-  </body>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <iframe id="login" src="https://apcfindu.web.app/auth/login" style="width:100%; height:580px; border:none;" scrolling="no"></iframe>
+    <div id="not_login">
+        <h1>This is pop up page</h1>
+        <div>
+            <p>This is pop up page content</p>
+            <a href="https://apcfindu.web.app/auth/signout">signout</a>
+        </div>
+    </div>
+    <script src="pop.js"></script>
+</body>
+<style>
+    body {
+        width: 400px;
+        height: 100%;
+    }
+</style>
+
 </html>

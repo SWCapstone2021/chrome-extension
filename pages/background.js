@@ -1,65 +1,134 @@
-// var console = chrome.extension.getBackgroundPage().console;
-let color = '#3aa757';
-
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.sync.set({ color });
-    console.log('Default background color set to %cgreen', `color: ${color}`);
+    let indexdb = window.indexedDB.open("firebaseLocalStorageDb", 1);
+    indexdb.onsuccess = function() {
+        let db = indexdb.result;
+        var objectStorageName = db.objectStoreNames[0];
+        if (objectStorageName == "firebaseLocalStorage") {
+            console.log("object storage already exists")
+        } else {
+            db.createObjectStore("firebaseLocalStorage", { keyPath: "fbase_key" });
+            console.log("object storage is created")
+        }
+    };
 });
-/*
-chrome.webNavigation.onCompleted.addListener(function () {
-    alert("This is my favorite website!");
-}, { url: [{ urlMatches: 'https://*.youtube.com/*' }] });
-alert("This is my favorite website!");
-// chrome.webNavigation.onCompleted.addListener(function() {
-//     alert("this is my favorite website!");
-// }, { url: [{ urlMatches: 'https://www.google.com/' }] });
-*/
-var background = {
 
-    user: "",
+async function init_firebase() {
+    let firebase_config_path_src = '../config/firebase_config.json'
+    let firebase_config_path = chrome.extension.getURL(firebase_config_path_src);
+    firebase_config = await $.getJSON(firebase_config_path);
+    firebase.initializeApp(firebase_config);
+}
+
+var bg_app = {
+
+    user: null,
+    db: null,
+    auth: null,
+    membership: "FREE",
 
     init: function() {
+        console.log(firebase)
+        this.db = firebase.firestore();
+        this.auth = firebase.auth();
+        this.load_user();
         chrome.runtime.onMessage.addListener(function(message, sender, reply) {
-            if (message.fn in background) {
-                background[message.fn](message, sender, reply)
+            if (message.fn in bg_app) {
+                bg_app[message.fn](message, sender, reply)
             }
         });
     },
 
-    setUser: function(message, sender, reply) {
-        this.user = message.user;
-    },
-
-    getUser: function(message, sender, reply) {
-        reply(this.user);
-    },
-
-    debug: function(message, sender, reply) {
-        console.log("eere")
-        chrome.storage.sync.set({ debug: message.debug }, function() {
-            console.log("Set key to ", message.debug);
+    add_listener: function() {
+        var docRef = this.db.collection("user").doc(this.user.email);
+        docRef.onSnapshot((doc) => {
+            console.log("Current data: ", doc.data());
+            this.membership = doc.data().membership;
         });
-        // 1. get tabs async
-        chrome.tabs.query({ active: true, currentWindow: true },
-            // 2. callback function
-            function(tabs) {
-                // 3. execute function or script
-                // tips: In this function document object is for content page
-                chrome.scripting.executeScript({
-                    target: { tabId: tabs[0].id },
-                    function: background["print"],
-                    // 4. this handling function
-                    // tips: all results are contained in array and you can get a result by .result property
-                });
+    },
+
+    load_user: function() {
+        console.log("state = unknown (until the callback is invoked)");
+        this.auth.onAuthStateChanged(user => {
+            if (user) {
+                console.log("state = definitely signed in");
+                this.user = user;
+                this.load_membership();
+            } else {
+                console.log("state = definitely signed out");
+                this.user = null;
+                this.membership = 'FREE'
             }
-        );
+        });
     },
 
-    print: function() {
-        chrome.storage.sync.get('debug', function(result) {
-            console.log(result.debug)
+    load_membership: function() {
+        var docRef = this.db.collection("user").doc(this.user.email);
+        docRef.get().then((doc) => {
+            if (doc.exists) {
+                console.log("load_membership:", doc.data());
+                this.add_listener();
+                this.membership = doc.data().membership
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("load_membership: no document");
+                this.membership = "FREE"
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
         });
+    },
+
+    logIn: function(message, sender, reply) {
+        console.log("Received %o from %o, frame", message, sender.tab, sender.frameId);
+        var user = message.text;
+        let indexdb = window.indexedDB.open("firebaseLocalStorageDb", 1);
+        indexdb.onsuccess = function() {
+            let db = indexdb.result;
+            let transaction = db.transaction("firebaseLocalStorage", "readwrite");
+            let storage = transaction.objectStore("firebaseLocalStorage");
+            let request = storage.getAll();
+            request.onsuccess = function(event) {
+                console.log("login")
+                console.log(user);
+                console.log(user.value);
+                if (request.result.lenght == 0) {
+                    storage.add(user);
+                } else {
+                    console.log("user already exists")
+                }
+            };
+
+        };
+        this.user = user.value;
+        reply("Gotcha!");
+    },
+
+    logOut: function(message, sender, reply) {
+        console.log("Received %o from %o, frame", message, sender.tab, sender.frameId);
+        var user = message.text[0];
+        let indexdb = window.indexedDB.open("firebaseLocalStorageDb", 1);
+        indexdb.onsuccess = function() {
+            let db = indexdb.result;
+            let transaction = db.transaction("firebaseLocalStorage", "readwrite");
+            let storage = transaction.objectStore("firebaseLocalStorage");
+            storage.delete(user);
+        };
+        this.user = null;
+        reply("Gotcha!");
+    },
+
+    get_user_status: function() {
+        if (this.user) {
+            return this.membership == 'PRO' ? 2 : 1;
+        } else {
+            return 0;
+        }
     }
 };
 
-background.init();
+async function init() {
+    await init_firebase();
+    bg_app.init();
+}
+
+init()

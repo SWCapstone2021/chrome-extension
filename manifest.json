@@ -10,13 +10,14 @@
         "tabs",
         "*://*.youtube.com/*",
         "https://202.30.30.3:5678/*"
-    ],    
+    ],
     "browser_action": {
         "default_popup": "./pages/popup.html"
     },
     "web_accessible_resources": [
         "scripts/*",
-        "pages/*"
+        "pages/*",
+        "config/*"
     ],
     "background": {
         "page": "./pages/background.html",
@@ -25,14 +26,26 @@
     "content_scripts": [{
         "all_frames": true,
         "js": [
-            "axios.min.js",
-            "jquery.min.js", "./scripts/youtube.js"
+            "libs/axios.min.js",
+            "libs/jquery.min.js",
+            "./scripts/youtube.js"
         ],
         "matches": [
             "https://*.youtube.com/*"
         ],
         "css": [
             "./inject.css"
+        ]
+    }, {
+        "js": [
+            "libs/firebase-app.js",
+            "libs/firebase-auth.js",
+            "libs/axios.min.js",
+            "libs/jquery.min.js",
+            "firebase.js"
+        ],
+        "matches": [
+            "https://apcfindu.web.app/*"
         ],
         "run_at": "document_end"
     }],
@@ -47,6 +60,6 @@
     },
     "icons": {},
     "manifest_version": 2,
-    "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://202.30.30.3:5678/; object-src 'self'"
+    "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://202.30.30.3:5678/; object-src 'self';"
 
 }
