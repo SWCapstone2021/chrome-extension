@@ -91,30 +91,23 @@ var bg_app = {
                 console.log("login")
                 console.log(user);
                 console.log(user.value);
-                if (request.result.lenght == 0) {
-                    storage.add(user);
-                } else {
-                    console.log("user already exists")
-                }
+                console.log(request.result)
+                storage.add(user);
             };
-
         };
-        this.user = user.value;
+        this.user = user;
         reply("Gotcha!");
     },
 
     logOut: function(message, sender, reply) {
         console.log("Received %o from %o, frame", message, sender.tab, sender.frameId);
-        var user = message.text[0];
-        let indexdb = window.indexedDB.open("firebaseLocalStorageDb", 1);
-        indexdb.onsuccess = function() {
-            let db = indexdb.result;
-            let transaction = db.transaction("firebaseLocalStorage", "readwrite");
-            let storage = transaction.objectStore("firebaseLocalStorage");
-            storage.delete(user);
-        };
-        this.user = null;
+        this.logOut_fn();
         reply("Gotcha!");
+    },
+
+    logOut_fn: function() {
+        this.auth.signOut().then(() => {}).catch((error) => {});
+        this.user = null;
     },
 
     get_user_status: function() {

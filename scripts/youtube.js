@@ -7,7 +7,7 @@ head.append(meta)
 const helpers = {
     onUrlChange(callback) {
         let href = "";
-        return setInterval(function () {
+        return setInterval(function() {
             if (href !== window.location.href) {
                 href = window.location.href;
                 callback(href);
@@ -20,11 +20,11 @@ const helpers = {
 };
 
 const render = {
-    
+
     sideTab: null,
     sideTabVisible: false,
 
-    init(){
+    init() {
         this.sideTabS();
     },
     sideTabS() {
@@ -34,19 +34,19 @@ const render = {
         this.sideTab.width = "100%";
         this.sideTab.src = "";
         this.sideTab.style.border = "1px solid #3c98c0";
-        var check= document.querySelector('tab_frame');
-        if(!check){
+        var check = document.querySelector('tab_frame');
+        if (!check) {
             var side_tab_loc = document.querySelector('div#secondary.style-scope.ytd-watch-flexy')
             side_tab_loc.insertBefore(this.sideTab, side_tab_loc.firstChild);
         }
-        if(this.sideTabVisible==false){
-            this.sideTab.width="0px";
-            this.sideTab.height="0px";
+        if (this.sideTabVisible == false) {
+            this.sideTab.width = "0px";
+            this.sideTab.height = "0px";
         }
     },
     baseButton() {
         const button = document.createElement("button");
-        button.id='side-button'
+        button.id = 'side-button'
         button.style.display = "flex";
         button.style.textAlign = "center";
         button.classList.add("sideButton");
@@ -60,11 +60,11 @@ const render = {
         button.appendChild(insideImg);
         button.addEventListener('click', () => {
             if (this.sideTabVisible) {
-                this.sideTabVisible=false;
+                this.sideTabVisible = false;
                 this.sideTab.width = "0px";
                 this.sideTab.height = "0px";
             } else {
-                this.sideTabVisible=true;
+                this.sideTabVisible = true;
                 this.sideTab.height = "500px";
                 this.sideTab.width = "100%";
                 this.sideTab.src = "chrome-extension://" + chrome.runtime.id + "/pages/searchTab.html"
@@ -80,11 +80,11 @@ const render = {
         button.appendChild(insideImg);
         button.addEventListener('click', () => {
             if (this.sideTabVisible) {
-                this.sideTabVisible=false;
+                this.sideTabVisible = false;
                 this.sideTab.width = "0px";
                 this.sideTab.height = "0px";
             } else {
-                this.sideTabVisible=true;
+                this.sideTabVisible = true;
                 this.sideTab.height = "500px";
                 this.sideTab.width = "100%";
                 this.sideTab.src = "chrome-extension://" + chrome.runtime.id + "/pages/summaryTab.html"
@@ -100,16 +100,16 @@ const render = {
         button.appendChild(insideImg);
         button.addEventListener('click', () => {
             if (this.sideTabVisible) {
-                this.sideTabVisible=false;
+                this.sideTabVisible = false;
                 this.sideTab.width = "0px";
                 this.sideTab.height = "0px";
             } else {
-                this.sideTabVisible=true;
+                this.sideTabVisible = true;
                 this.sideTab.height = "500px";
                 this.sideTab.width = "100%";
                 this.sideTab.src = "chrome-extension://" + chrome.runtime.id + "/pages/settingTab.html"
             }
-        })        
+        })
         return button;
     },
     //side button render
@@ -125,7 +125,7 @@ const render = {
         sideButtonBar.appendChild(setting);
         return sideButtonBar;
     },
-    triangle(){
+    triangle() {
         const tri_loc = document.querySelector("#container .html5-video-player .ytp-timed-markers-container")
         const tri = document.createElement('img');
         tri.src = chrome.runtime.getURL("../pages/img/triangle.svg");
@@ -135,13 +135,22 @@ const render = {
 
 var url = window.location.href;
 
-function main(url){
+function main(url) {
     //신뢰도
-    if(url.substring(0,44)==''){
-
+    if (url.substring(0, 44) == 'https://www.youtube.com/results?search_query') {
+        // var title = document.querySelectorAll('#metadata-line');
+        // console.log(title)
+        // for (i = 0; i < title.length; i++) {
+        //     var node = document.createElement("SPAN");
+        //     var textnode = document.createTextNode(`키워드 ${i}`);
+        //     node.style.color = "red";
+        //     node.appendChild(textnode);
+        //     title[i].appendChild(node);
+        // }
+        // chrome.runtime.reload()
     }
     //사이드 버튼 처리
-    if(url.substring(0,29)=='https://www.youtube.com/watch'){
+    if (url.substring(0, 29) == 'https://www.youtube.com/watch') {
         const sidebar = render.sideBar();
         const sidebarposition = document.querySelector('div#columns.style-scope.ytd-watch-flexy');
         sidebarposition.append(sidebar);
