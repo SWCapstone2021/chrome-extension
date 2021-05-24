@@ -11,6 +11,11 @@ chrome.runtime.onInstalled.addListener(() => {
         }
     };
 });
+chrome.commands.onCommand.addListener(function (command) {
+   if(command=="search-bar"){
+       chrome.runtime.sendMessage(tab.id,'innerTab');
+   } 
+});
 
 async function init_firebase() {
     let firebase_config_path_src = '../config/firebase_config.json'

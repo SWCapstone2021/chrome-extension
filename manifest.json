@@ -33,6 +33,7 @@
         "matches": [
             "https://*.youtube.com/*"
         ],
+        "run_at":"document_end",
         "css": [
             "./inject.css"
         ]

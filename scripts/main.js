@@ -100,7 +100,7 @@ chrome.runtime.onMessage.addListener(gotMessage);
 
 function gotMessage(message, sender, sendResponse) {
     console.log(message)
-    if (message == "insideTrue") {
+    if (message == "ine") {
         insideTab.width = "250px";
         insideTab.height = "300px";
         insideTab.style = "top:10%;left:60%;position:absolute;z-index:99999;overflow:hidden;";

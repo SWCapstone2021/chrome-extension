@@ -34,10 +34,11 @@ const Setting = {
     taburl: "chrome-extension://" + chrome.runtime.id + "/pages/settingTab.html",
     tabshown: false
 }
+
 const render = {
     
     sideTab: null,
-    sideTabVisible: false,
+    sideTabVisible:  false,
     
     init(){
         this.sideTabS();
@@ -48,9 +49,6 @@ const render = {
     sideTabS() {
         this.sideTab = document.createElement('iframe');
         this.sideTab.id = 'tab_frame'
-        this.sideTab.height = "500px";
-        this.sideTab.width = "100%";
-        this.sideTab.src = "";
         this.sideTab.style.border = "1px solid #3c98c0";
         var check= document.querySelector('tab_frame');
         if(!check){
@@ -108,7 +106,7 @@ const render = {
         const tri_loc = document.querySelector("#container .html5-video-player .ytp-timed-markers-container")
         const tri = document.createElement('img');
         tri.src = chrome.runtime.getURL("../pages/img/triangle.svg");
-        tri.style = "bottom:5%; position: absolute; z-index: 99999; overflow: hidden;"
+        tri.style = "left:"+leftpercent+";bottom:5%; position: absolute; z-index: 99999; overflow: hidden;"
         tri_loc.appendChild(tri)
 
     }
@@ -120,7 +118,9 @@ function showTimeStamp(time){
     wholeT = parseInt(wholeT)
     console.log(timeToString(wholeT));// 분 & 초로 변경
     var current = time * 100 / wholeT;//타임스탬프찍은거 비율 계산
-    render.triangle(current)
+    var percent = String(current)+"%"
+    console.log(percent);
+    render.triangle(percent)
 }
 
 function stringToTime(timeString) {
@@ -147,7 +147,7 @@ function timeToString(timeSecond) {
 
 function main(url){
     //신뢰도
-    if(url.substring(0,44)==''){
+    if (url.substring(0, 44) =='https://www.youtube.com/results?search_query'){
 
     }
     //사이드 버튼 처리
@@ -155,7 +155,36 @@ function main(url){
         const sidebar = render.sideBar();
         const sidebarposition = document.querySelector('div#columns.style-scope.ytd-watch-flexy');
         sidebarposition.append(sidebar);
+        showTimeStamp(300)
     }
 }
 
 helpers.onUrlChange(main);
+
+//////////////////////////////////////////////
+
+var insideTab = document.createElement('iframe');
+insideTab.classList.add('insideTab');
+insideTab.id = 'innerTab';
+insideTab.width = "0px";
+insideTab.height = "0px";
+var search_tab_loc = document.querySelector("#container .html5-video-player");
+search_tab_loc.appendChild(insideTab)
+
+chrome.runtime.onMessage.addListener(gotMessage);
+
+function gotMessage(message, sender, sendResponse) {
+    console.log(message)
+    if (message == "innerTab") {
+        insideTab.width = "250px";
+        insideTab.height = "300px";
+        insideTab.style = "top:10%;left:60%;position:absolute;z-index:99999;overflow:hidden;";
+        insideTab.src = "chrome-extension://" + chrome.runtime.id + "/pages/innerSearch.html";
+    } else {
+        insideTab.width = "0px";
+        insideTab.height = "0px";
+    }
+    if (message == "overlayOn") {
+        renderTime(200)
+    }
+}
