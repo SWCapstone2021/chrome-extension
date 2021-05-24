@@ -116,6 +116,10 @@ var bg_app = {
         } else {
             return 0;
         }
+    },
+
+    get_video_id: function() {
+        return window.location.href;
     }
 };
 

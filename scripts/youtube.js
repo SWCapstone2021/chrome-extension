@@ -13,7 +13,7 @@ const helpers = {
                 href = window.location.href;
                 callback(href);
             }
-        }, 111);
+        }, 500);
     },
     isVideoURL(url) {
         return url.indexOf(`https://${window.location.host}/watch`) === 0;
@@ -149,16 +149,76 @@ function timeToString(timeSecond) {
 function main(url) {
     //신뢰도
     if (url.substring(0, 44) == 'https://www.youtube.com/results?search_query') {
-        // var title = document.querySelectorAll('#metadata-line');
-        // console.log(title)
-        // for (i = 0; i < title.length; i++) {
-        //     var node = document.createElement("SPAN");
-        //     var textnode = document.createTextNode(`키워드 ${i}`);
-        //     node.style.color = "red";
-        //     node.appendChild(textnode);
-        //     title[i].appendChild(node);
-        // }
-        // chrome.runtime.reload()
+        search_word = document.querySelector("input").value;
+        var metatags = document.querySelectorAll('#metadata-line');
+        var titles = document.querySelectorAll('#video-title');
+        var blocks = document.querySelectorAll('#dismissible');
+        var prefix_len = "https://www.youtube.com/watch?v=".length
+        var video_ids = []
+        for (i = 0; i < (titles.length > 10 ? 10 : titles.length); i++) {
+            console.log(titles[i])
+            var title = titles[i].href.split("&")[0];
+            video_ids.push(title.substring(prefix_len, title.length))
+                // var node = document.createElement("SPAN");
+                // var textnode = document.createTextNode(`키워드 ${i}`);
+                // node.style.color = "red";
+                // node.appendChild(textnode);
+                // title[i].appendChild(node);
+        }
+        var body = {
+            "video_id": video_ids,
+            "keyword": search_word
+        }
+        console.log(body)
+            // $.post("https://202.30.30.3:5678/api/ml/freq", body, function(data) {
+            //     console.log(data)
+            //     for (i = 0; i < (data.result.length > 10 ? 10 : data.result.length); i++) {
+            //         var node = document.createElement("SPAN");
+            //         if (data.result[i].credibility == 'No subs') {
+            //             var textnode = document.createTextNode(`${data.result[i].credibility}`);
+            //             node.style.color = "black";
+            //         } else {
+            //             node.style.color = "green";
+            //             if (data.result[i].credibility == '0.0') {
+            //                 node.style.color = "black";
+            //             }
+            //             var textnode = document.createTextNode(`신뢰도 ${data.result[i].credibility}`);
+            //         }
+            //         node.appendChild(textnode);
+            //         metatags[i].appendChild(node);
+            //     }
+            // }, "json");
+        var data = {
+            "result": [
+                { "credibility": "높음" },
+                { "credibility": "중간" },
+                { "credibility": "높음" },
+                { "credibility": "높음" },
+                { "credibility": "낮음" },
+                { "credibility": "중간" },
+                { "credibility": "낮음" },
+                { "credibility": "낮음" },
+
+            ]
+        }
+        for (i = 0; i < (data.result.length > 10 ? 10 : data.result.length); i++) {
+            var node = document.createElement("SPAN");
+            var textnode = document.createTextNode(`신뢰도 ${data.result[i].credibility}`);
+            if (data.result[i].credibility == "높음") {
+                node.style.color = "blue";
+                blocks[i].style.backgroundColor = "#F0D60B";
+            } else if (data.result[i].credibility == "중간") {
+                node.style.color = "green";
+            } else if (data.result[i].credibility == "낮음") {
+                node.style.color = "black";
+            }
+            node.style.fontSize = "2rem";
+
+            node.appendChild(textnode);
+            metatags[i].appendChild(node);
+        }
+
+        chrome.runtime.reload()
     }
     //사이드 버튼 처리
     if (url.substring(0, 29) == 'https://www.youtube.com/watch') {
