@@ -8,7 +8,7 @@ var url = window.location.href;
 const helpers = {
     onUrlChange(callback) {
         let href = "";
-        return setInterval(function () {
+        return setInterval(function() {
             if (href !== window.location.href) {
                 href = window.location.href;
                 callback(href);
@@ -36,11 +36,11 @@ const Setting = {
 }
 
 const render = {
-    
+
     sideTab: null,
-    sideTabVisible:  false,
-    
-    init(){
+    sideTabVisible: false,
+
+    init() {
         this.sideTabS();
         this.sideTab.height = "0px";
         this.sideTab.width = "0px";
@@ -50,15 +50,15 @@ const render = {
         this.sideTab = document.createElement('iframe');
         this.sideTab.id = 'tab_frame'
         this.sideTab.style.border = "1px solid #3c98c0";
-        var check= document.querySelector('tab_frame');
-        if(!check){
+        var check = document.querySelector('tab_frame');
+        if (!check) {
             var side_tab_loc = document.querySelector('div#secondary.style-scope.ytd-watch-flexy')
             side_tab_loc.insertBefore(this.sideTab, side_tab_loc.firstChild);
         }
     },
     baseButton() {
         const button = document.createElement("button");
-        button.id='side-button'
+        button.id = 'side-button'
         button.style.display = "flex";
         button.style.textAlign = "center";
         button.classList.add("sideButton");
@@ -76,12 +76,12 @@ const render = {
                 this.sideTab.height = "0px";
                 Search.tabshown = false;
                 Setting.tabshown = false;
-                Summary.tabshown=false;
+                Summary.tabshown = false;
             } else {
                 Search.tabshown = false;
                 Setting.tabshown = false;
                 Summary.tabshown = false;
-                tab_name.tabshown=true;
+                tab_name.tabshown = true;
                 this.sideTab.height = "500px";
                 this.sideTab.width = "100%";
                 this.sideTab.src = tab_name.taburl
@@ -102,7 +102,7 @@ const render = {
         sideButtonBar.appendChild(settingB);
         return sideButtonBar;
     },
-    triangle(leftpercent){
+    triangle(leftpercent) {
         const tri_loc = document.querySelector("#container .html5-video-player .ytp-timed-markers-container")
         const tri = document.createElement('img');
         tri.src = chrome.runtime.getURL("../pages/img/triangle.svg");
@@ -112,15 +112,13 @@ const render = {
     }
 }
 
-function showTimeStamp(time){
+function showTimeStamp(time) {
     var code = document.getElementsByClassName("video-stream");
     var wholeT = code[0].duration;
     wholeT = parseInt(wholeT)
-    console.log(timeToString(wholeT));// 분 & 초로 변경
-    var current = time * 100 / wholeT;//타임스탬프찍은거 비율 계산
-    var percent = String(current)+"%"
-    console.log(percent);
-    render.triangle(percent)
+    console.log(timeToString(wholeT)); // 분 & 초로 변경
+    var current = time * 100 / wholeT; //타임스탬프찍은거 비율 계산
+    render.triangle(current)
 }
 
 function stringToTime(timeString) {
@@ -135,23 +133,24 @@ function stringToTime(timeString) {
     }
     return timeSecond;
 }
+
 function timeToString(timeSecond) {
     if (timeSecond < 60)
         return "00:" + (timeSecond % 60);
     else if (timeSecond < 3600)
-        return parseInt(timeSecond / 60) + ":" + (timeSecond % 60);//' + "s";
+        return parseInt(timeSecond / 60) + ":" + (timeSecond % 60); //' + "s";
     else
         return parseInt(timeSecond / 3600) + ":" + parseInt((timeSecond % 3600) / 60) + ":" + (timeSecond % 60);
 }
 
 
-function main(url){
+function main(url) {
     //신뢰도
     if (url.substring(0, 44) =='https://www.youtube.com/results?search_query'){
 
     }
     //사이드 버튼 처리
-    if(url.substring(0,29)=='https://www.youtube.com/watch'){
+    if (url.substring(0, 29) == 'https://www.youtube.com/watch') {
         const sidebar = render.sideBar();
         const sidebarposition = document.querySelector('div#columns.style-scope.ytd-watch-flexy');
         sidebarposition.append(sidebar);
