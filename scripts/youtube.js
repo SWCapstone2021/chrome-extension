@@ -118,7 +118,8 @@ function showTimeStamp(time) {
     wholeT = parseInt(wholeT)
     console.log(timeToString(wholeT)); // 분 & 초로 변경
     var current = time * 100 / wholeT; //타임스탬프찍은거 비율 계산
-    render.triangle(current)
+    var percent = String(current)+"%";
+    render.triangle(percent)
 }
 
 function stringToTime(timeString) {
