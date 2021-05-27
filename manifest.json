@@ -9,7 +9,7 @@
         "storage",
         "tabs",
         "*://*.youtube.com/*",
-        "https://202.30.30.3:5678/*"
+        "https://findyouu.xyz/*"
     ],
     "browser_action": {
         "default_popup": "./pages/popup.html"
@@ -34,7 +34,7 @@
         "matches": [
             "https://*.youtube.com/*"
         ],
-        "run_at":"document_end",
+        "run_at":"document_idle",
         "css": [
             "./inject.css",
             "libs/bootstrap.min.css"

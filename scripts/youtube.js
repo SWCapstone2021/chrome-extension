@@ -13,7 +13,7 @@ const helpers = {
                 href = window.location.href;
                 callback(href);
             }
-        }, 111);
+        }, 500);
     },
     isVideoURL(url) {
         return url.indexOf(`https://${window.location.host}/watch`) === 0;
@@ -91,16 +91,19 @@ const render = {
     },
     //side button render
     sideBar() {
-        var sideButtonBar = document.createElement('div');
-        sideButtonBar.id = 'sideBarDiv';
-        sideButtonBar.style.width = '70px';
-        const searchB = render.makeButton(Search);
-        const summaryB = render.makeButton(Summary);
-        const settingB = render.makeButton(Setting);
-        sideButtonBar.appendChild(searchB);
-        sideButtonBar.appendChild(summaryB);
-        sideButtonBar.appendChild(settingB);
-        return sideButtonBar;
+        var check = document.getElementById('sideBarDiv');
+        if(!check){
+            var sideButtonBar = document.createElement('div');
+            sideButtonBar.id = 'sideBarDiv';
+            sideButtonBar.style.width = '70px';
+            const searchB = render.makeButton(Search);
+            const summaryB = render.makeButton(Summary);
+            const settingB = render.makeButton(Setting);
+            sideButtonBar.appendChild(searchB);
+            sideButtonBar.appendChild(summaryB);
+            sideButtonBar.appendChild(settingB);
+            return sideButtonBar;
+        }
     },
     triangle(leftpercent) {
         const tri_loc = document.querySelector("#container .html5-video-player .ytp-timed-markers-container")
@@ -116,7 +119,6 @@ function showTimeStamp(time) {
     var code = document.getElementsByClassName("video-stream");
     var wholeT = code[0].duration;
     wholeT = parseInt(wholeT)
-    console.log(timeToString(wholeT)); // 분 & 초로 변경
     var current = time * 100 / wholeT; //타임스탬프찍은거 비율 계산
     var percent = String(current)+"%";
     render.triangle(percent)
@@ -143,23 +145,115 @@ function timeToString(timeSecond) {
     else
         return parseInt(timeSecond / 3600) + ":" + parseInt((timeSecond % 3600) / 60) + ":" + (timeSecond % 60);
 }
-
+window.addEventListener('message', function (e) {
+    if (e.data.childData) {
+        showTimeStamp(e.data.childData);
+    }
+});
 
 function main(url) {
     //신뢰도
-    if (url.substring(0, 44) =='https://www.youtube.com/results?search_query'){
+    var a = document.querySelector('ytd-search')
+    if(a){
+        console.log(a.querySelectorAll('#metadata-line'))
+        setTimeout(function () {
+            search_word = document.querySelector("input").value;
+            var metatags = a.querySelectorAll('#metadata-line');
+            var titles = a.querySelectorAll('#video-title');
+            var blocks = a.querySelectorAll('#dismissible');
+            var prefix_len = "https://www.youtube.com/watch?v=".length
+            var video_ids = []
+            for (i = 0; i < (titles.length > 10 ? 10 : titles.length); i++) {
+                console.log(titles[i])
+                var title = titles[i].href.split("&")[0];
+                video_ids.push(title.substring(prefix_len, title.length))
+                // var node = document.createElement("SPAN");
+                // var textnode = document.createTextNode(`키워드 ${i}`);
+                // node.style.color = "red";
+                // node.appendChild(textnode);
+                // title[i].appendChild(node);
+            }
+            var body = {
+                "video_id": video_ids,
+                "keyword": search_word
+            }
+            console.log(body)
+            $.post("https://findyouu.xyz/api/ml/freq", body, function(data) {
+                console.log(data)
+                for (i = 0; i < (data.result.length > 10 ? 10 : data.result.length); i++) {
+                    var node = document.createElement("SPAN");
+                    if (data.result[i].credibility == 'No subs') {
+                        var textnode = document.createTextNode(`${data.result[i].credibility}`);
+                        node.style.color = "black";
+                    } else {
+                        node.style.color = "green";
+                        if (data.result[i].credibility == '0.00') {
+                            node.style.color = "black";
+                        }
+                        var textnode = document.createTextNode(`신뢰도 ${data.result[i].credibility}`);
+                    }
+                    node.appendChild(textnode);
+                    metatags[i].appendChild(node);
+                }
+            }, "json");
+        /*var data = {
+            "result": [
+                { "credibility": "높음" },
+                { "credibility": "중간" },
+                { "credibility": "높음" },
+                { "credibility": "높음" },
+                { "credibility": "낮음" },
+                { "credibility": "중간" },
+                { "credibility": "낮음" },
+                { "credibility": "낮음" },
 
+            ]
+        }
+        for (i = 0; i < (data.result.length > 10 ? 10 : data.result.length); i++) {
+            var node = document.createElement("SPAN");
+            var textnode = document.createTextNode(`신뢰도 ${data.result[i].credibility}`);
+            if (data.result[i].credibility == "높음") {
+                node.style.color = "blue";
+                blocks[i].style.backgroundColor = "#F0D60B";
+            } else if (data.result[i].credibility == "중간") {
+                node.style.color = "green";
+            } else if (data.result[i].credibility == "낮음") {
+                node.style.color = "black";
+            }
+            node.style.fontSize = "2rem";
+
+            node.appendChild(textnode);
+            metatags[i].appendChild(node);
+        }*/
+
+        chrome.runtime.reload()
+    },5000);
     }
+    
+    
     //사이드 버튼 처리
     if (url.substring(0, 29) == 'https://www.youtube.com/watch') {
-        const sidebar = render.sideBar();
-        const sidebarposition = document.querySelector('div#columns.style-scope.ytd-watch-flexy');
-        sidebarposition.append(sidebar);
-        showTimeStamp(300)
+        var check = document.getElementById('sideBarDiv');
+        if(check==null){
+            var sideButtonBar = document.createElement('div');
+            sideButtonBar.id = 'sideBarDiv';
+            sideButtonBar.style.width = '70px';
+            const searchB = render.makeButton(Search);
+            const summaryB = render.makeButton(Summary);
+            const settingB = render.makeButton(Setting);
+            sideButtonBar.appendChild(searchB);
+            sideButtonBar.appendChild(summaryB);
+            sideButtonBar.appendChild(settingB);
+            const sidebarposition = document.querySelector('div#columns.style-scope.ytd-watch-flexy');
+            sidebarposition.append(sideButtonBar);
+        }
+        
     }
 }
+window.onload=()=>{
+    helpers.onUrlChange(main);
+}
 
-helpers.onUrlChange(main);
 
 //////////////////////////////////////////////
 
@@ -175,12 +269,13 @@ chrome.runtime.onMessage.addListener(gotMessage);
 
 function gotMessage(message, sender, sendResponse) {
     console.log(message)
-    if (message == "innerTab") {
+    if (message == "searchTabOn") {
         insideTab.width = "250px";
         insideTab.height = "300px";
         insideTab.style = "top:10%;left:60%;position:absolute;z-index:99999;overflow:hidden;";
         insideTab.src = "chrome-extension://" + chrome.runtime.id + "/pages/innerSearch.html";
-    } else {
+    }
+    else if (message == 'searchTabOff'){
         insideTab.width = "0px";
         insideTab.height = "0px";
     }

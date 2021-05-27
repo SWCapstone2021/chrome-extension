@@ -11,10 +11,21 @@ chrome.runtime.onInstalled.addListener(() => {
         }
     };
 });
+var inside=false;
 chrome.commands.onCommand.addListener(function (command) {
-   if(command=="search-bar"){
-       chrome.runtime.sendMessage(tab.id,'innerTab');
-   } 
+    // Call 'update' with an empty properties object to get access to the current
+    // tab (given to us in the callback function).
+    chrome.tabs.update({}, function (tab) {
+        if (command == 'search-bar'&& inside==false) {
+            inside=true;
+            chrome.tabs.sendMessage(tab.id,'searchTabOn')
+            //message send to youtube.js
+        }
+        else{
+            inside=false;
+            chrome.tabs.sendMessage(tab.id,'searchTabOff')
+        }
+    });
 });
 
 async function init_firebase() {
@@ -121,6 +132,10 @@ var bg_app = {
         } else {
             return 0;
         }
+    },
+
+    get_video_id: function() {
+        return window.location.href;
     }
 };
 

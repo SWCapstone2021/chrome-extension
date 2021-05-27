@@ -6,17 +6,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script src="../libs/jquery.min.js"></script>
     <link href="../libs/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="searchTab.css">
+    <link rel="stylesheet" href="login.css">
     <title>Document</title>
 </head>
 
 <body>
     <div id="not_login">
-        <iframe src="settingTab.html" style="width:100%; height:500px; border:none;" scrolling="no"></iframe>
-        <div style="display: flex; justify-content: flex-start;">
-            <div style="display: flex; flex-direction: column;">
-                <p>User Info</p>
+        <div class="subject">
+            <img src="./img/solo_logo.svg" class="solo_logo">
+            <span><b class="SearchTab"> Setting Tab </b></span>
+        </div>
+
+        <div class="optionBody" style="margin:10px">
+
+            <div style="display: flex; justify-content: flex-start;">
+                <div style="display: flex; flex-direction: column;">
+                    <p>User E-mail : <span id="email"></span></p>
+                    <p>User PLAN : <span id="plan"></span></p>
+                </div>
+            </div>
+            <div class="my-5" style="display: flex; justify-content: flex-start;">
+                <label for="search" class="mr-5">Search</label>
+                <select id="search" class="form-select">
+                    <option selected value="Keyword">Keyword</option>
+                    <option value="Related Keyword">Related Keyword</option>
+                    <option value="Query">Query</option>
+                </select>
+            </div>
+            <div class="my-5" style="display: flex; justify-content: flex-start;">
+                <label class="mr-10" for="ui">UI</label>
+                <select id="ui" class="form-select">
+                    <option selected value="sidebar">sidebar</option>
+                    <option value="search tab">search tab</option>
+                </select>
             </div>
         </div>
+
         <a style="display: block" id="sign_out_btn" href="https://apcfindu.web.app/auth/signout" target="_blank" class="btn btn-primary">Sign Out</a>
     </div>
 
