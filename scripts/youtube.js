@@ -1,10 +1,25 @@
-var head = document.querySelector('head')
+/*var head = document.querySelector('head')
 var meta = document.createElement('meta')
 meta.httpEquiv = "Content-Security-Policy"
 meta.content = "upgrade-insecure-requests"
-head.append(meta)
+head.append(meta)*/
 var url = window.location.href;
-
+var user=null;
+var membership = null;
+//만약 user null 이면 로그인 필요 , user !null 이고 membership FREE이면 구독 필요
+//여기서는 신뢰도만 제한
+//검색 & 요약은 거기서 제약 적용함
+chrome.runtime.sendMessage({ UserInfo: "getUser" }, function (response) {
+    this.user = response.UserInfo;
+    console.log(this.user)
+    if(response.UserInfo){
+        chrome.runtime.sendMessage({Membership:"getMembership"},function(response){
+            this.membership = response.Membership;
+        })
+    }
+});
+console.log("UserInfo"+ this.user)
+console.log("Membership"+this.membership)
 const helpers = {
     onUrlChange(callback) {
         let href = "";
@@ -71,20 +86,25 @@ const render = {
         insideImg.src = chrome.runtime.getURL(tab_name.imgurl);
         button.appendChild(insideImg);
         button.addEventListener('click', () => {
-            if (tab_name.tabshown) {
-                this.sideTab.width = "0px";
-                this.sideTab.height = "0px";
-                Search.tabshown = false;
-                Setting.tabshown = false;
-                Summary.tabshown = false;
-            } else {
-                Search.tabshown = false;
-                Setting.tabshown = false;
-                Summary.tabshown = false;
-                tab_name.tabshown = true;
-                this.sideTab.height = "500px";
-                this.sideTab.width = "100%";
-                this.sideTab.src = tab_name.taburl
+            if(!user){
+                alert("Need to Log In First!");
+            }
+            else{
+                if (tab_name.tabshown) {
+                    this.sideTab.width = "0px";
+                    this.sideTab.height = "0px";
+                    Search.tabshown = false;
+                    Setting.tabshown = false;
+                    Summary.tabshown = false;
+                } else {
+                    Search.tabshown = false;
+                    Setting.tabshown = false;
+                    Summary.tabshown = false;
+                    tab_name.tabshown = true;
+                    this.sideTab.height = "500px";
+                    this.sideTab.width = "100%";
+                    this.sideTab.src = tab_name.taburl
+                }
             }
         })
         return button;
@@ -106,10 +126,11 @@ const render = {
         }
     },
     triangle(leftpercent) {
-        const tri_loc = document.querySelector("#container .html5-video-player .ytp-timed-markers-container")
+        const tri_loc = document.querySelector("div.ytp-progress-bar-paddng")
         const tri = document.createElement('img');
+        tri.id = 'triangle'
         tri.src = chrome.runtime.getURL("../pages/img/triangle.svg");
-        tri.style = "left:"+leftpercent+";bottom:5%; position: absolute; z-index: 99999; overflow: hidden;"
+        tri.style = "left:"+leftpercent+"; bottom: 3px; position: absolute; z-index: 99999; overflow: hidden;"
         tri_loc.appendChild(tri)
 
     }
@@ -119,9 +140,16 @@ function showTimeStamp(time) {
     var code = document.getElementsByClassName("video-stream");
     var wholeT = code[0].duration;
     wholeT = parseInt(wholeT)
+    console.log(wholeT)
     var current = time * 100 / wholeT; //타임스탬프찍은거 비율 계산
+    console.log(current)
     var percent = String(current)+"%";
-    render.triangle(percent)
+    render.triangle(percent);
+    var video = document.querySelector('#movie_player>div.html5-video-container > video');
+    var tri = document.getElementById('triangle');
+    tri.onclick=()=>{
+        video.currentTime = time;
+    }
 }
 
 function stringToTime(timeString) {
@@ -145,14 +173,49 @@ function timeToString(timeSecond) {
     else
         return parseInt(timeSecond / 3600) + ":" + parseInt((timeSecond % 3600) / 60) + ":" + (timeSecond % 60);
 }
-window.addEventListener('message', function (e) {
-    if (e.data.childData) {
-        showTimeStamp(e.data.childData);
-    }
-});
+
 
 function main(url) {
-    //신뢰도
+
+    var tabopen=document.getElementById('tab_frame');
+    var intab = document.getElementById('innerTab')
+    
+    //if side tab open-> close
+    if(tabopen){
+        tabopen.height='0px';
+        tabopen.width='0px';
+        Setting.tabshown=false;
+        Search.tabshown=false;
+        Summary.tabshown=false;
+    }
+
+    //if inside tab open -> close
+    if(intab){
+        //send to background sideTabOff request
+        chrome.runtime.sendMessage({ text: "hide" }, function (response) {
+            console.log("Response: ", response);
+        });
+        intab.width='0px';
+        intab.height='0px';
+        var pos = document.querySelector('div.ytp-progress-bar-padding')
+        var result = document.querySelectorAll('#triangle')
+        if(result){
+            for (let i = 0; i < result.length; i++) { 
+                pos.removeChild(result[i]) 
+            }
+        }
+    }
+    else{
+        var insideTab = document.createElement('iframe');
+        insideTab.classList.add('insideTab');
+        insideTab.id = 'innerTab';
+        insideTab.width = "0px";
+        insideTab.height = "0px";
+        var search_tab_loc = document.querySelector("#container .html5-video-player");
+        search_tab_loc.appendChild(insideTab)
+    }
+
+    //reliablity check 
     var a = document.querySelector('ytd-search')
     if(a){
         console.log(a.querySelectorAll('#metadata-line'))
@@ -160,18 +223,12 @@ function main(url) {
             search_word = document.querySelector("input").value;
             var metatags = a.querySelectorAll('#metadata-line');
             var titles = a.querySelectorAll('#video-title');
-            var blocks = a.querySelectorAll('#dismissible');
             var prefix_len = "https://www.youtube.com/watch?v=".length
             var video_ids = []
             for (i = 0; i < (titles.length > 10 ? 10 : titles.length); i++) {
                 console.log(titles[i])
-                var title = titles[i].href.split("&")[0];
+                var title = titles[i].href.split('&')[0];
                 video_ids.push(title.substring(prefix_len, title.length))
-                // var node = document.createElement("SPAN");
-                // var textnode = document.createTextNode(`키워드 ${i}`);
-                // node.style.color = "red";
-                // node.appendChild(textnode);
-                // title[i].appendChild(node);
             }
             var body = {
                 "video_id": video_ids,
@@ -185,55 +242,33 @@ function main(url) {
                     if (data.result[i].credibility == 'No subs') {
                         var textnode = document.createTextNode(`${data.result[i].credibility}`);
                         node.style.color = "black";
+                        node.style.fontWeight="900";
                     } else {
-                        node.style.color = "green";
+                        node.style.color = "red";
+                        node.style.fontWeight = "900";
                         if (data.result[i].credibility == '0.00') {
                             node.style.color = "black";
+                            node.style.fontWeight = "900";
                         }
                         var textnode = document.createTextNode(`신뢰도 ${data.result[i].credibility}`);
                     }
-                    node.appendChild(textnode);
-                    metatags[i].appendChild(node);
+                    if(!metatags[i].innerText.includes("신뢰도")&&!metatags[i].innerText.includes('No subs')){
+                        node.appendChild(textnode);
+                        metatags[i].appendChild(node);
+                    }
+                    
                 }
+                console.log(a.querySelectorAll('#metadata-line'))
+
             }, "json");
-        /*var data = {
-            "result": [
-                { "credibility": "높음" },
-                { "credibility": "중간" },
-                { "credibility": "높음" },
-                { "credibility": "높음" },
-                { "credibility": "낮음" },
-                { "credibility": "중간" },
-                { "credibility": "낮음" },
-                { "credibility": "낮음" },
-
-            ]
-        }
-        for (i = 0; i < (data.result.length > 10 ? 10 : data.result.length); i++) {
-            var node = document.createElement("SPAN");
-            var textnode = document.createTextNode(`신뢰도 ${data.result[i].credibility}`);
-            if (data.result[i].credibility == "높음") {
-                node.style.color = "blue";
-                blocks[i].style.backgroundColor = "#F0D60B";
-            } else if (data.result[i].credibility == "중간") {
-                node.style.color = "green";
-            } else if (data.result[i].credibility == "낮음") {
-                node.style.color = "black";
-            }
-            node.style.fontSize = "2rem";
-
-            node.appendChild(textnode);
-            metatags[i].appendChild(node);
-        }*/
-
-        chrome.runtime.reload()
-    },5000);
+        chrome.runtime.reload();
+    },1000);
     }
-    
     
     //사이드 버튼 처리
     if (url.substring(0, 29) == 'https://www.youtube.com/watch') {
         var check = document.getElementById('sideBarDiv');
+        console.log('sidebar check' + check)
         if(check==null){
             var sideButtonBar = document.createElement('div');
             sideButtonBar.id = 'sideBarDiv';
@@ -247,39 +282,35 @@ function main(url) {
             const sidebarposition = document.querySelector('div#columns.style-scope.ytd-watch-flexy');
             sidebarposition.append(sideButtonBar);
         }
-        
+
+        //to show result on the video
+        window.addEventListener('message', function (e) {
+            console.log(e.data)
+            if (e.data.childData) {
+                showTimeStamp(e.data.childData);
+            }
+            if (e.data.currentTime) {
+                console.log('inside')
+                var code = document.querySelector('#movie_player div.html5-video-container video');
+                code.currentTime = e.data.currentTime;
+            }
+        });
+
+        //for opening inside search tab
+        chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+            var insideTab = document.getElementById('innerTab')
+            if (message == "searchTabOn") {
+                insideTab.width = "230px";
+                insideTab.height = "50px";
+                insideTab.style = "top:10%;left:50%;position:absolute;z-index:99999;overflow:hidden;";
+                insideTab.src = "chrome-extension://" + chrome.runtime.id + "/pages/innerSearch.html";
+            }
+            else if (message == 'searchTabOff') {
+                insideTab.width = "0px";
+                insideTab.height = "0px";
+            }
+        });
     }
 }
-window.onload=()=>{
-    helpers.onUrlChange(main);
-}
 
-
-//////////////////////////////////////////////
-
-var insideTab = document.createElement('iframe');
-insideTab.classList.add('insideTab');
-insideTab.id = 'innerTab';
-insideTab.width = "0px";
-insideTab.height = "0px";
-var search_tab_loc = document.querySelector("#container .html5-video-player");
-search_tab_loc.appendChild(insideTab)
-
-chrome.runtime.onMessage.addListener(gotMessage);
-
-function gotMessage(message, sender, sendResponse) {
-    console.log(message)
-    if (message == "searchTabOn") {
-        insideTab.width = "250px";
-        insideTab.height = "300px";
-        insideTab.style = "top:10%;left:60%;position:absolute;z-index:99999;overflow:hidden;";
-        insideTab.src = "chrome-extension://" + chrome.runtime.id + "/pages/innerSearch.html";
-    }
-    else if (message == 'searchTabOff'){
-        insideTab.width = "0px";
-        insideTab.height = "0px";
-    }
-    if (message == "overlayOn") {
-        renderTime(200)
-    }
-}
+helpers.onUrlChange(main);

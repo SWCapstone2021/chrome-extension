@@ -17,6 +17,7 @@ function init() {
     }
     if (user_status != 0) {
         //     var user_name = background.bg_app.user.displayName;
+        console.log("in")
         var user_email = background.bg_app.user.email;
         document.getElementById("email").innerText = user_email
         document.getElementById("plan").innerText = user_status == 2 ? "PRO" : "FREE"

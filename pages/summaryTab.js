@@ -22,7 +22,11 @@ function renderURL(statusText) {
 getCurrentTabUrl(function (url) {
     renderURL(url);
     document.getElementById("btn_sum").onclick = function () {
-        console.log(videoID)
-        
+        $.post(`https://findyouu.xyz/api/ml/summarization`, { "video_id": videoID}, function (data) {
+            var data = data.result;
+            console.log(data)
+            var result = document.getElementById('result');
+            result.append(data)
+        }, "json");
     }
 })

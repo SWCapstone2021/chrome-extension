@@ -4,13 +4,26 @@
     align-items: center;
     justify-items: center;
 }
-.txt_add{
+.txt{
     align-items: center;
     justify-items: center;
     width:250%;
 }
-.btn_add{
+.inside_btn{
     margin-left: 5%;
+    width: 25px;
+    height: 25px;
+    padding-left: 2px;
+    padding-right: 2px;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+}
+.image{
+    width: 15px;
+    height: 15px;
+    padding: 0px;
+    display: flex;
     align-items: center;
     justify-items: center;
 }

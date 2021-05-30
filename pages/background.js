@@ -11,8 +11,21 @@ chrome.runtime.onInstalled.addListener(() => {
         }
     };
 });
+
 var inside=false;
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    if (msg.text == "hide") {
+        inside = false;
+    }
+    if (msg.UserInfo == "getUser")
+        sendResponse({ UserInfo: localStorage.getItem("User") });
+        console.log(localStorage.getItem("Current membership"))
+    if (msg.Membership=='getMembership')
+        sendResponse({ Membership: localStorage.getItem("Current membership")}); // snub them.
+});
+
 chrome.commands.onCommand.addListener(function (command) {
+    console.log(inside)
     // Call 'update' with an empty properties object to get access to the current
     // tab (given to us in the callback function).
     chrome.tabs.update({}, function (tab) {
@@ -48,6 +61,7 @@ var bg_app = {
         this.auth = firebase.auth();
         this.load_user();
         chrome.runtime.onMessage.addListener(function(message, sender, reply) {
+            console.log(message)
             if (message.fn in bg_app) {
                 bg_app[message.fn](message, sender, reply)
             }
@@ -66,13 +80,15 @@ var bg_app = {
         console.log("state = unknown (until the callback is invoked)");
         this.auth.onAuthStateChanged(user => {
             if (user) {
-                console.log("state = definitely signed in");
+                console.log("state = definitely signed in"+user.email);
                 this.user = user;
                 this.load_membership();
+                localStorage.setItem("User",this.user);
             } else {
                 console.log("state = definitely signed out");
                 this.user = null;
-                this.membership = 'FREE'
+                this.membership = 'FREE';
+                localStorage.setItem("User", null);
             }
         });
     },
@@ -84,10 +100,12 @@ var bg_app = {
                 console.log("load_membership:", doc.data());
                 this.add_listener();
                 this.membership = doc.data().membership
+                localStorage.setItem("Current membership", this.membership);
             } else {
                 // doc.data() will be undefined in this case
                 console.log("load_membership: no document");
                 this.membership = "FREE"
+                localStorage.setItem("Current membership", this.membership);
             }
         }).catch((error) => {
             console.log("Error getting document:", error);
@@ -124,6 +142,8 @@ var bg_app = {
     logOut_fn: function() {
         this.auth.signOut().then(() => {}).catch((error) => {});
         this.user = null;
+        localStorage.setItem("User", this.user);
+        localStorage.setItem("Current membership", null);
     },
 
     get_user_status: function() {
@@ -143,5 +163,4 @@ async function init() {
     await init_firebase();
     bg_app.init();
 }
-
 init()

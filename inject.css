@@ -31,3 +31,8 @@
   background-color:rgba(0,0,0,0.7);
   border-radius: 10px;
 }
+:not(.ytp-exp-bottom-control-flexbox) .ytp-right-controls{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}

@@ -1,32 +1,52 @@
+var userInfo = localStorage.getItem("User");
+var membershipInfo = localStorage.getItem("Current membership");
 var app = {
 
     init: function() {
+        $selection = document.getElementById('search');
         $selected_search = document.getElementById("selected_search");
-        $selected_ui = document.getElementById("selected_ui");
+        //$selected_ui = document.getElementById("selected_ui");
         $option_search = document.getElementById("search");
         $option_ui = document.getElementById("ui");
 
+        if(!userInfo){
+            $selection_search.innerHTML="Please Log In First!"
+        }
+        else{
+            if(membershipInfo=='FREE'){
+                $selection.innerHTML ='<option value="Keyword">Keyword</option>'
+            }
+            else{
+                $selection.innerHTML = '<option value="Keyword">Keyword</option><option value="Related Keyword">Related Keyword</option><option value="Query">Query</option>'
+            }
+        }
         // 1. load option 1
         chrome.storage.sync.get('selected_search', function(result) {
-            $selected_search.innerHTML = result.selected_search;
+            if (!userInfo){
+                $selected_search.innerHTML = 'Need to Log In'
+            }
+            else{
+                $selected_search.innerHTML = localStorage.getItem('search_option');
+            }
         });
 
-        // 2. load option 2
+        /*// 2. load option 2
         chrome.storage.sync.get('selected_ui', function(result) {
             $selected_ui.innerHTML = result.selected_ui;
-        });
+        });*/
 
         // 3. add event listeners
 
         $option_search.onclick = function() {
             var value = $option_search.value;
             $selected_search.innerHTML = "You selected: " + value;
+            localStorage.setItem('search_option',value);
         }
 
-        $option_ui.onclick = function() {
-            var value = $option_ui.value;
-            $selected_ui.innerHTML = "You selected: " + value;
-        }
+        //$option_ui.onclick = function() {
+        //    var value = $option_ui.value;
+        //    $selected_ui.innerHTML = "You selected: " + value;
+        //}
 
 
         // $button.addEventListener("click", async() => {
