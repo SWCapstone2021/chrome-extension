@@ -21,8 +21,14 @@ function renderURL(statusText) {
 
 getCurrentTabUrl(function (url) {
     renderURL(url);
+    var search = false;
     document.getElementById("inside_btn").onclick = function () {
         console.log(videoID)
+        
+        if (search) {
+            window.parent.postMessage({ eraseData: true }, '*');
+        }
+
         var keyword = document.getElementById("txt").value;
         if (keyword != "") {
             //keyword 보내고 결과 받아야!!
@@ -35,5 +41,7 @@ getCurrentTabUrl(function (url) {
 
             before_document = document
         }
+        search = true;
+
     }
 })

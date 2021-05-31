@@ -12,7 +12,11 @@ chrome.runtime.onInstalled.addListener(() => {
     };
 });
 
+//수동설정
 var inside=false;
+//localStorage.setItem('User', "NULL");
+//localStorage.setItem('User',"amelia9981@ajou.ac.kr");
+//localStorage.setItem("Current membership","PRO");
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     if (msg.text == "hide") {
         inside = false;
@@ -60,6 +64,7 @@ var bg_app = {
         this.db = firebase.firestore();
         this.auth = firebase.auth();
         this.load_user();
+        console.log(this.auth)
         chrome.runtime.onMessage.addListener(function(message, sender, reply) {
             console.log(message)
             if (message.fn in bg_app) {
