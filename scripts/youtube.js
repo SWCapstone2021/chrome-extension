@@ -124,12 +124,19 @@ const render = {
             return sideButtonBar;
         }
     },
-    triangle(leftpercent) {
-        const tri_loc = document.querySelector("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar > div.ytp-chapters-container > div > div.ytp-progress-bar-padding")
+    triangle(leftpixel,time) {
+        //const tri_loc = document.querySelector("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar > div.ytp-chapters-container > div > div.ytp-progress-bar-padding")
+        //const tri_loc = document.querySelector("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar > div.ytp-timed-markers-container")
+        const tri_loc = document.querySelector("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar")
         const tri = document.createElement('img');
         tri.id = 'triangle'
         tri.src = chrome.runtime.getURL("../pages/img/triangle.svg");
-        tri.style = "left:" + leftpercent + "px; bottom: 5px; position: absolute; z-index: 99999; overflow: hidden;"
+        tri.style = "left:" + leftpixel + "px; bottom: 5px; position: absolute; z-index: 99999; overflow: hidden;"
+        var code = document.querySelector('#movie_player div.html5-video-container video');
+        tri.onclick=()=>{
+            code.currentTime = time;
+            console.log("Clicked")
+        }
         tri_loc.appendChild(tri)
         console.log(tri);
     }
@@ -145,7 +152,7 @@ function showTimeStamp(time) {
     var barpixel = pad.offsetWidth;
     var pixel = (barpixel*current / 100) - 10;
     console.log(pixel)
-    render.triangle(pixel);
+    render.triangle(pixel,time);
 }
 
 function stringToTime(timeString) {
@@ -175,6 +182,43 @@ function main(url) {
         /*if(user=="NULL"){
             alert("To Use FindU Need to Log In First");
         }*/
+        var tabopen = document.getElementById('tab_frame');
+            var intab = document.getElementById('innerTab')
+
+            //if side tab open-> close
+            if (tabopen) {
+                tabopen.height = '0px';
+                tabopen.width = '0px';
+                Setting.tabshown = false;
+                Search.tabshown = false;
+                Summary.tabshown = false;
+            }
+
+            //if inside tab open -> close
+            if (intab) {
+                //send to background sideTabOff request
+                chrome.runtime.sendMessage({ text: "hide" }, function (response) {
+                    console.log("Response: ", response);
+                });
+                intab.width = '0px';
+                intab.height = '0px';
+                var pos = document.querySelector("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar")
+                var result = document.querySelectorAll('#triangle')
+                if (result) {
+                    for (let i = 0; i < result.length; i++) {
+                        pos.removeChild(result[i])
+                    }
+                }
+            }
+            else {
+                var insideTab = document.createElement('iframe');
+                insideTab.classList.add('insideTab');
+                insideTab.id = 'innerTab';
+                insideTab.width = "0px";
+                insideTab.height = "0px";
+                var search_tab_loc = document.querySelector("#container .html5-video-player");
+                search_tab_loc.appendChild(insideTab)
+            }
         var start = 0;
         var a = document.querySelector('ytd-search')
         console.log(a)
@@ -229,43 +273,7 @@ function main(url) {
 
         //사이드 버튼 처리
         if (url.substring(0, 29) == 'https://www.youtube.com/watch') {
-            var tabopen = document.getElementById('tab_frame');
-            var intab = document.getElementById('innerTab')
-
-            //if side tab open-> close
-            if (tabopen) {
-                tabopen.height = '0px';
-                tabopen.width = '0px';
-                Setting.tabshown = false;
-                Search.tabshown = false;
-                Summary.tabshown = false;
-            }
-
-            //if inside tab open -> close
-            if (intab) {
-                //send to background sideTabOff request
-                chrome.runtime.sendMessage({ text: "hide" }, function (response) {
-                    console.log("Response: ", response);
-                });
-                intab.width = '0px';
-                intab.height = '0px';
-                var pos = document.querySelector('div.ytp-progress-bar-padding')
-                var result = document.querySelectorAll('#triangle')
-                if (result) {
-                    for (let i = 0; i < result.length; i++) {
-                        pos.removeChild(result[i])
-                    }
-                }
-            }
-            else {
-                var insideTab = document.createElement('iframe');
-                insideTab.classList.add('insideTab');
-                insideTab.id = 'innerTab';
-                insideTab.width = "0px";
-                insideTab.height = "0px";
-                var search_tab_loc = document.querySelector("#container .html5-video-player");
-                search_tab_loc.appendChild(insideTab)
-            }
+            
             var check = document.getElementById('sideBarDiv');
             console.log('sidebar check' + check)
             if (check == null) {
@@ -322,6 +330,9 @@ function main(url) {
         }
     
 }
-
+const modeTheater = document.querySelector("#player-theater-container");
+if (modeTheater.hasChildNodes() == true) {
+    console.log("not theater mode")
+}
 helpers.onUrlChange(main)
 

@@ -93,7 +93,7 @@ var bg_app = {
                 console.log("state = definitely signed out");
                 this.user = null;
                 this.membership = 'FREE';
-                localStorage.setItem("User", null);
+                localStorage.setItem("User", "NULL");
             }
         });
     },
