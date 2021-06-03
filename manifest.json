@@ -59,8 +59,7 @@
         ],
         "matches": [
             "https://apcfindu.web.app/auth/signout"
-        ],
-        "run_at": "document_start"
+        ]
     }],
     "commands": {
         "search-bar": {

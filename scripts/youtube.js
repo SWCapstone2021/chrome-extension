@@ -6,6 +6,8 @@ head.append(meta)*/
 var url = window.location.href;
 var user=null;
 var membership = null;
+
+
 //만약 user null 이면 로그인 필요 , user !null 이고 membership FREE이면 구독 필요
 //여기서는 신뢰도만 제한
 //검색 & 요약은 거기서 제약 적용함
@@ -142,14 +144,12 @@ const render = {
     }
 }
 
-function showTimeStamp(time) {
+function showTimeStamp(time,barpixel) {
     var code = document.getElementsByClassName("video-stream");
     var wholeT = code[0].duration;
     wholeT = parseInt(wholeT)
     console.log(wholeT)
     var current = time * 100 / wholeT; //타임스탬프찍은거 비율 계산
-    var pad = document.querySelector("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar > div.ytp-chapters-container > div > div.ytp-progress-bar-padding")
-    var barpixel = pad.offsetWidth;
     var pixel = (barpixel*current / 100) - 10;
     console.log(pixel)
     render.triangle(pixel,time);
@@ -177,12 +177,75 @@ function timeToString(timeSecond) {
         return parseInt(timeSecond / 3600) + ":" + parseInt((timeSecond % 3600) / 60) + ":" + (timeSecond % 60);
 }
 
+var start = 0;
+var begin = 0;
+var interval = setInterval(function () {
+    var a = document.querySelector('ytd-search')
+    search_word = document.querySelector("input").value;
+    var metatags = a.querySelectorAll('#metadata-line');
+    var titles = a.querySelectorAll('#video-title.yt-simple-endpoint.style-scope.ytd-video-renderer');
+    console.log("title length : "+titles.length)
+    console.log("Start point : " + start);
+    var video_ids = []
+    for (i = start; i < (titles.length > 10+start ? 10+start : titles.length); i++) {
+        var title = titles[i].href.split('=')[1].split('&')[0];
+        video_ids.push(title)
+    }
+    var body = {
+        "video_id": video_ids
+    }
+    if(titles.length>start){
+        begin = start;
+        start += video_ids.length;
+    }
+    else{
+        start =0;
+        begin =0;
+    }
+    $.post("https://findyouu.xyz/api/ml/freq", body, function (data) {
+        console.log(data)
+        for (i = 0; i < (data.result.length > 10 ? 10 : data.result.length); i++) {
+            var node = document.createElement("SPAN");
+            if (data.result[i].credibility == 'No subs') {
+                var textnode = document.createTextNode(`${data.result[i].credibility}`);
+                node.style.color = "black";
+                node.style.fontWeight = "900";
+            } else {
+                node.style.color = "red";
+                node.style.fontWeight = "900";
+                if (data.result[i].credibility == '0.00') {
+                    node.style.color = "black";
+                    node.style.fontWeight = "900";
+                }
+                var textnode = document.createTextNode(`신뢰도 ${data.result[i].credibility}`);
+            }
+            console.log("INSIDE START : "+ start)
+            if (!metatags[i+begin].innerText.includes("신뢰도") && !metatags[i+begin].innerText.includes('No subs')) {
+                node.appendChild(textnode);
+                metatags[i+begin].appendChild(node);
+                console.log("add reliablity")
+            }
+
+        }
+        //body.video_id =[];
+    }, "json");
+
+    chrome.runtime.reload();
+}, 5000);
 
 function main(url) {
-        /*if(user=="NULL"){
-            alert("To Use FindU Need to Log In First");
-        }*/
-        var tabopen = document.getElementById('tab_frame');
+        console.log("USER CHECK : " + user)
+        var a = document.querySelector('ytd-search')
+        if (user != "NULL" && a ) {
+            interval;
+
+        }
+
+        //사이드 버튼 처리
+        if (url.substring(0, 29) == 'https://www.youtube.com/watch') {
+            clearInterval(interval)
+            var intabResult = [];
+            var tabopen = document.getElementById('tab_frame');
             var intab = document.getElementById('innerTab')
 
             //if side tab open-> close
@@ -219,61 +282,6 @@ function main(url) {
                 var search_tab_loc = document.querySelector("#container .html5-video-player");
                 search_tab_loc.appendChild(insideTab)
             }
-        var start = 0;
-        var a = document.querySelector('ytd-search')
-        console.log(a)
-        if (a && user != "NULL") {
-            console.log(a.querySelectorAll('#metadata-line'))
-            setTimeout(function () {
-                search_word = document.querySelector("input").value;
-                var metatags = a.querySelectorAll('#metadata-line');
-                var titles = a.querySelectorAll('#video-title.yt-simple-endpoint.style-scope.ytd-video-renderer');
-                var prefix_len = "https://www.youtube.com/watch?v=".length
-                var video_ids = []
-                for (i = start; i < (titles.length > 10 ? 10 : titles.length); i++) {
-                    var title = titles[i].href.split('=')[1].split('&')[0];
-                    video_ids.push(title.substring(prefix_len, title.length))
-                }
-                var body = {
-                    "video_id": video_ids
-                }
-
-                console.log(body)
-                $.post("https://findyouu.xyz/api/ml/freq", body, function (data) {
-                    console.log(data)
-                    for (i = start; i < (data.result.length > 10 ? 10 : data.result.length); i++) {
-                        var node = document.createElement("SPAN");
-                        if (data.result[i].credibility == 'No subs') {
-                            var textnode = document.createTextNode(`${data.result[i].credibility}`);
-                            node.style.color = "black";
-                            node.style.fontWeight = "900";
-                        } else {
-                            node.style.color = "red";
-                            node.style.fontWeight = "900";
-                            if (data.result[i].credibility == '0.00') {
-                                node.style.color = "black";
-                                node.style.fontWeight = "900";
-                            }
-                            var textnode = document.createTextNode(`신뢰도 ${data.result[i].credibility}`);
-                        }
-                        if (!metatags[i].innerText.includes("신뢰도") && !metatags[i].innerText.includes('No subs')) {
-                            node.appendChild(textnode);
-                            metatags[i].appendChild(node);
-                            console.log("add reliablity")
-                        }
-
-                    }
-
-                }, "json");
-                title.length > 10 && start < title.length ? start += 10 : start = 0;
-                chrome.runtime.reload();
-                console.log(start)
-            }, 1000);
-        }
-
-        //사이드 버튼 처리
-        if (url.substring(0, 29) == 'https://www.youtube.com/watch') {
-            
             var check = document.getElementById('sideBarDiv');
             console.log('sidebar check' + check)
             if (check == null) {
@@ -290,20 +298,52 @@ function main(url) {
                 sidebarposition.append(sideButtonBar);
             }
 
-            //to show result on the video
-            window.addEventListener('message', function (e) {
-                console.log(e.data)
-                if (e.data.eraseData) {
-                    var pos = document.querySelector('div.ytp-progress-bar-padding')
+
+            var modeButton = document.querySelector("#movie_player > div.ytp-chrome-bottom > div.ytp-chrome-controls > div.ytp-right-controls > button.ytp-size-button.ytp-button")
+            modeButton.onclick=()=>{
+                var pos = document.querySelector("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar")
+                var result = document.querySelectorAll('#triangle')
+                console.log(result);
+                if (result) {
+                    for (let i = 0; i < result.length; i++) {
+                        pos.removeChild(result[i])
+                    }
+                }
+            }
+            window.addEventListener("keydown", (e) => {
+                if (e.key == "t") {
+                    console.log(e.key);
+                    var pos = document.querySelector("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar")
                     var result = document.querySelectorAll('#triangle')
+                    console.log(result);
                     if (result) {
                         for (let i = 0; i < result.length; i++) {
                             pos.removeChild(result[i])
                         }
                     }
                 }
+            });
+
+            //to show result on the video
+            window.addEventListener('message', function (e) {
+                console.log(e.data)
+                if (e.data.eraseData) {
+                    var pos = document.querySelector("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar")
+                    var result = document.querySelectorAll('#triangle')
+                    if (result) {
+                        for (let i = 0; i < result.length; i++) {
+                            pos.removeChild(result[i])
+                        }
+                    }
+                    //리스트 초기화
+                    intabResult=[]
+                }
                 if (e.data.childData) {
-                    showTimeStamp(e.data.childData);
+                    var pad = document.querySelector("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar")
+                    var barpixel = pad.offsetWidth;
+                    showTimeStamp(e.data.childData,barpixel);
+                    //시간 리스트에 추가
+                    intabResult.push(e.data.childData);
                 }
                 if (e.data.currentTime) {
                     console.log('inside')
@@ -326,13 +366,12 @@ function main(url) {
                     insideTab.width = "0px";
                     insideTab.height = "0px";
                 }
+                else if(message = 'modeChange'){
+                    console.log("mode change")
+                }
             });
         }
-    
 }
-const modeTheater = document.querySelector("#player-theater-container");
-if (modeTheater.hasChildNodes() == true) {
-    console.log("not theater mode")
-}
+
 helpers.onUrlChange(main)
 

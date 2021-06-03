@@ -15,7 +15,7 @@ chrome.runtime.onInstalled.addListener(() => {
 //수동설정
 var inside=false;
 //localStorage.setItem('User', "NULL");
-//localStorage.setItem('User',"amelia9981@ajou.ac.kr");
+localStorage.setItem('User',"amelia9981@ajou.ac.kr");
 //localStorage.setItem("Current membership","PRO");
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     if (msg.text == "hide") {
@@ -30,19 +30,25 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 
 chrome.commands.onCommand.addListener(function (command) {
     console.log(inside)
+    if(bg_app.user){
+        chrome.tabs.update({}, function (tab) {
+            if (command == 'search-bar' && inside == false) {
+                inside = true;
+                chrome.tabs.sendMessage(tab.id, 'searchTabOn')
+                //message send to youtube.js
+            }
+            else if (command == 'search-bar' && inside == true) {
+                inside = false;
+                chrome.tabs.sendMessage(tab.id, 'searchTabOff')
+            }
+        });
+    }
+    else{
+        alert("Need to Log In First!");
+    }
     // Call 'update' with an empty properties object to get access to the current
     // tab (given to us in the callback function).
-    chrome.tabs.update({}, function (tab) {
-        if (command == 'search-bar'&& inside==false) {
-            inside=true;
-            chrome.tabs.sendMessage(tab.id,'searchTabOn')
-            //message send to youtube.js
-        }
-        else{
-            inside=false;
-            chrome.tabs.sendMessage(tab.id,'searchTabOff')
-        }
-    });
+    
 });
 
 async function init_firebase() {
