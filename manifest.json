@@ -34,31 +34,10 @@
         "matches": [
             "https://*.youtube.com/*"
         ],
-        "run_at":"document_idle",
+        "run_at": "document_idle",
         "css": [
             "./inject.css",
             "libs/bootstrap.min.css"
-        ]
-    }, {
-        "js": [
-            "libs/firebase-app.js",
-            "libs/firebase-auth.js",
-            "libs/axios.min.js",
-            "libs/jquery.min.js",
-            "scripts/firebase.js"
-        ],
-        "matches": [
-            "https://apcfindu.web.app/*"
-        ],
-        "run_at": "document_end"
-    }, {
-        "js": [
-            "libs/firebase-app.js",
-            "libs/firebase-auth.js",
-            "scripts/firebase-logout.js"
-        ],
-        "matches": [
-            "https://apcfindu.web.app/auth/signout"
         ]
     }],
     "commands": {
@@ -72,6 +51,6 @@
     },
     "icons": {},
     "manifest_version": 2,
-    "content_security_policy": "script-src 'self' https://apcfindu.web.app/* https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://findyouu.xyz/*; object-src 'self';"
+    "content_security_policy": "script-src 'self' https://apcfindu.web.app/* https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com https://findyouu.xyz/* https://apis.google.com/; object-src 'self';"
 
 }

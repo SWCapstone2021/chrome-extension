@@ -5,9 +5,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script src="../libs/jquery.min.js"></script>
+    <script src="../libs/firebase-app.js"></script>
+    <script src="../libs/firebase-auth.js"></script>
+    <script src="../libs/firebase-ui-auth.js"></script>
     <link href="../libs/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="searchTab.css">
     <link rel="stylesheet" href="login.css">
+
+    <link type="text/css" rel="stylesheet" href="../libs/firebase-ui-auth.css" />
     <title>Document</title>
 </head>
 
@@ -22,6 +27,7 @@
 
             <div style="display: flex; justify-content: flex-start;">
                 <div style="display: flex; flex-direction: column;">
+                    <p><a href="https://apcfindu.web.app/" target="_blank">홈페이지 바로 가기</a></p>
                     <p>User E-mail : <span id="email"></span></p>
                     <p>User PLAN : <span id="plan"></span></p>
                 </div>
@@ -43,10 +49,15 @@
             </div>
         </div>
 
+
         <a style="display: block" id="sign_out_btn" href="https://apcfindu.web.app/auth/signout" target="_blank" class="btn btn-primary">Sign Out</a>
     </div>
 
-    <iframe id="login" src="https://apcfindu.web.app/auth/login" style="width:100%; height:580px; border:none;" scrolling="no"></iframe>
+    <div id="login">
+        <h1 class="text-center">Welcome to FindU</h1>
+        <div id="firebaseui-auth-container"></div>
+        <div id="loader">Loading...</div>
+    </div>
 
     <script src="pop.js"></script>
 </body>
