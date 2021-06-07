@@ -3,6 +3,7 @@ var user = localStorage.getItem("User");
 var search_option = localStorage.getItem('search_option')
 console.log(search_option)
 console.log(localStorage.getItem('User'))
+var user_membership = localStorage.getItem("membership");
 
 function getCurrentTabUrl(callback) {
     var queryInfo = {
@@ -110,7 +111,7 @@ getCurrentTabUrl(function (url) {
             }
 
             //related word option result
-            else if (search_option == 'Related Keyword') {
+            else if (search_option == 'Related Keyword'&&user_membership=="PRO") {
                 if (keyword != "") {
                     //keyword 보내고 결과 받아야!!
                     $.post(` https://findyouu.xyz/api/ml/association`, { "video_id": videoID, "keyword": keyword }, function (data) {
@@ -174,7 +175,7 @@ getCurrentTabUrl(function (url) {
             }
 
             //QA option
-            else if (search_option == 'Query') {
+            else if (search_option == 'Query' && user_membership == "PRO") {
                 if (keyword != "") {
                     //keyword 보내고 결과 받아야!!
                     
