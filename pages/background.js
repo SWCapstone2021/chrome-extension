@@ -99,6 +99,7 @@ var bg_app = {
 
     get_user_status: function() {
         if (this.user) {
+            localStorage.setItem("membership", this.membership);
             return this.membership == 'PRO' ? 2 : 1;
         } else {
             return 0;

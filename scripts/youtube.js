@@ -187,7 +187,7 @@ var interval = setInterval(function () {
     console.log("title length : "+titles.length)
     console.log("Start point : " + start);
     var video_ids = []
-    for (i = start; i < (titles.length > 10+start ? 10+start : titles.length); i++) {
+    for (i = start; i < (titles.length > 5+start ? 5+start : titles.length); i++) {
         var title = titles[i].href.split('=')[1].split('&')[0];
         video_ids.push(title)
     }
@@ -204,7 +204,7 @@ var interval = setInterval(function () {
     }
     $.post("https://findyouu.xyz/api/ml/freq", body, function (data) {
         console.log(data)
-        for (i = 0; i < (data.result.length > 10 ? 10 : data.result.length); i++) {
+        for (i = 0; i < (data.result.length > 5 ? 5 : data.result.length); i++) {
             var node = document.createElement("SPAN");
             if (data.result[i].credibility == 'No subs') {
                 var textnode = document.createTextNode(`${data.result[i].credibility}`);
@@ -213,7 +213,7 @@ var interval = setInterval(function () {
             } else {
                 node.style.color = "red";
                 node.style.fontWeight = "900";
-                if (data.result[i].credibility == '0.00') {
+                if (data.result[i].credibility <= '5.0') {
                     node.style.color = "black";
                     node.style.fontWeight = "900";
                 }
@@ -231,14 +231,13 @@ var interval = setInterval(function () {
     }, "json");
 
     chrome.runtime.reload();
-}, 5000);
+}, 2000);
 
 function main(url) {
         console.log("USER CHECK : " + user)
         var a = document.querySelector('ytd-search')
         if (user != "NULL" && a ) {
             interval;
-
         }
 
         //사이드 버튼 처리
@@ -359,7 +358,7 @@ function main(url) {
                 if (message == "searchTabOn") {
                     insideTab.width = "230px";
                     insideTab.height = "50px";
-                    insideTab.style = "top:10%;left:50%;position:absolute;z-index:99999;overflow:hidden;";
+                    insideTab.style = "top:20%;left:60%;position:absolute;z-index:99999;overflow:hidden;";
                     insideTab.src = "chrome-extension://" + chrome.runtime.id + "/pages/innerSearch.html";
                 }
                 else if (message == 'searchTabOff') {
