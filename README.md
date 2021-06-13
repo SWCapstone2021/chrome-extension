@@ -1,15 +1,60 @@
-## 찾아봐유 크롬 익스텐션
+## FindU Read Me
 
-이 프로젝트는 2021 Ajou University Spring SW capston design 과목의 일환으로 진행되었습니다.
+<p align="center">
+    <img src="pics/logo-com.svg"/>
+</p>
+<h4 align="center">스크립트 기반 영상 검색 및 요약 서비스</h4>
+<p align="center">
+    <a href="https://github.com/SWCapstone2021/WebPage/actions/workflows/mian.yml">
+        <img src="https://github.com/SWCapstone2021/WebPage/actions/workflows/mian.yml/badge.svg"/>
+    </a> 
+    <a href="https://github.com/SWCapstone2021/WebPage/actions/workflows/dev.yml">
+        <img src="https://github.com/SWCapstone2021/WebPage/actions/workflows/dev.yml/badge.svg?branch=dev"/>
+    </a>
+    <a href="https://github.com/SWCapstone2021/WebPage/actions/workflows/preview.yml">
+        <img src="https://github.com/SWCapstone2021/WebPage/actions/workflows/preview.yml/badge.svg?branch=dev"/>
+    </a>	
+    <a href="https://github.com/SWCapstone2021/WebPage/issues">
+        <img src="https://img.shields.io/github/issues/SWCapstone2021/WebPage"/>
+    </a>
+    <a href="https://github.com/SWCapstone2021/WebPage/pulls">
+        <img src="https://img.shields.io/github/forks/SWCapstone2021/WebPage"/>
+    </a>
+    <a href="https://github.com/SWCapstone2021/WebPage/stargazers">
+        <img src="https://img.shields.io/github/stars/SWCapstone2021/WebPage"/>
+    </a>
+    <a href="https://github.com/SWCapstone2021/WebPage/blob/main/LICENSE">
+        <img src="https://img.shields.io/github/license/SWCapstone2021/WebPage"/>
+    </a> <br/>
+    <img src="https://img.shields.io/badge/Nuxt.js-00C58E?style=flat-square&logo=nuxt.js&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Built with Firebase-FFCA28?style=flat-square&logo=Firebase&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Vue-4FC08D?style=flat-square&logo=Vue-dot-js&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Vuetify-1867C0?style=flat-square&logo=Vuetify&logoColor=white"/>
+</p>
+<p align="center">
+  <a href="#tutorial">Tutorial</a></a> • 
+  <a href="#features">Features</a> •  
+  <a href="#system-structures">System Structures</a> • 
+  <a href="#contributors">Contributors</a> • 
+  <a href="#license">License</a>
+</p>
+<p align="center">
+    이 프로젝트는 2021 Ajou University Spring SW capston design 과목의 일환으로 진행되었습니다. <br/>
+    이 어플리케이션은 상업적인 목적이 포함되어 있지 않습니다. 
+    이 프로젝트는 팀 APC에 의해 개발되었습니다.<br/>
+    해당 레포는 찾아봐유의 크롬 익스텐션 소스코드를 저장하고 있습니다.      
+</p>
 
-해당 레포는 찾아봐유의 크롬 익스텐션 소스코드를 저장하고 있습니다. 
 
 
 
-## 튜토리얼
 
-1. 크롬 익스텐션에서 앱을 다운로드 받는다. [다운로드 링크](https://www.google.com)
-2. 찾아봐유 크롬 익스텐션을 실행 후 로그인 한다. 
+
+
+## Tutorial
+
+1. 크롬 익스텐션에서 앱을 다운로드 받는다. [다운로드 링크](https://github.com/SWCapstone2021/chrome-extension/archive/refs/tags/v0.9.zip)
+2. 찾아봐유 크롬 익스텐션을 실행 후 [로그인](https://apcfindu.web.app/) 한다. 
 3. [유튜브](https://www.youtube.com) 에서 동영상을 검색 한다.
 4. 시청할 동영상을 선택한다.
 5. 동영상을 즐겁게 감상 한다.
@@ -17,27 +62,24 @@
 
 
 
-## 주요 기능 소개
+## Features
 
-크롬 익스텐션에서는 다음과 같은 기능을 제공합니다.
+<p align="center">
+    <h5>1. CTRL+F 기능</h5>
+    <img src="https://user-images.githubusercontent.com/31476895/121774518-b91ee800-cbbd-11eb-931a-55070890f54e.gif"/>
+	<h5>2. QA 기능</h5>
+    <img src="https://user-images.githubusercontent.com/31476895/121774521-bae8ab80-cbbd-11eb-8b42-9b69661e4165.gif"/>
+	<h5>3. 신뢰도 기능</h5>
+    <img src="https://user-images.githubusercontent.com/31476895/121774525-bd4b0580-cbbd-11eb-843f-144380845ff1.gif"/>
+	<h5>4. 요약 기능</h5>
+    <img src="https://user-images.githubusercontent.com/31476895/121774528-bf14c900-cbbd-11eb-829b-407745dae1d2.gif"/>
+</p>
 
-1. 영상의 신뢰도 표시 기능
 
-   
 
-2. 영상의 하이라이트 표시 기능 
+## System Structure
 
-   1. 타임 스탬프 형식
-
-      
-
-   2. 사이드바 형식
-
-      
-
-3. 영상내 탐색 기능
-
-   
+![systemStructure](pics/systemStructure.png)
 
 
 
