@@ -5,31 +5,23 @@
 </p>
 <h4 align="center">스크립트 기반 영상 검색 및 요약 서비스</h4>
 <p align="center">
-    <a href="https://github.com/SWCapstone2021/WebPage/actions/workflows/mian.yml">
-        <img src="https://github.com/SWCapstone2021/WebPage/actions/workflows/mian.yml/badge.svg"/>
+    <a href="https://github.com/SWCapstone2021/chrome-extension/actions/workflows/main.yml">
+        <img src="https://github.com/SWCapstone2021/chrome-extension/actions/workflows/main.yml/badge.svg"/>
     </a> 
-    <a href="https://github.com/SWCapstone2021/WebPage/actions/workflows/dev.yml">
-        <img src="https://github.com/SWCapstone2021/WebPage/actions/workflows/dev.yml/badge.svg?branch=dev"/>
+    <a href="https://github.com/SWCapstone2021/chrome-extension/issues">
+        <img src="https://img.shields.io/github/issues/SWCapstone2021/chrome-extension"/>
     </a>
-    <a href="https://github.com/SWCapstone2021/WebPage/actions/workflows/preview.yml">
-        <img src="https://github.com/SWCapstone2021/WebPage/actions/workflows/preview.yml/badge.svg?branch=dev"/>
-    </a>	
-    <a href="https://github.com/SWCapstone2021/WebPage/issues">
-        <img src="https://img.shields.io/github/issues/SWCapstone2021/WebPage"/>
+    <a href="https://github.com/SWCapstone2021/chrome-extension/pulls">
+        <img src="https://img.shields.io/github/forks/SWCapstone2021/chrome-extension"/>
     </a>
-    <a href="https://github.com/SWCapstone2021/WebPage/pulls">
-        <img src="https://img.shields.io/github/forks/SWCapstone2021/WebPage"/>
+    <a href="https://github.com/SWCapstone2021/chrome-extension/stargazers">
+        <img src="https://img.shields.io/github/stars/SWCapstone2021/chrome-extension"/>
     </a>
-    <a href="https://github.com/SWCapstone2021/WebPage/stargazers">
-        <img src="https://img.shields.io/github/stars/SWCapstone2021/WebPage"/>
-    </a>
-    <a href="https://github.com/SWCapstone2021/WebPage/blob/main/LICENSE">
-        <img src="https://img.shields.io/github/license/SWCapstone2021/WebPage"/>
+    <a href="https://github.com/SWCapstone2021/chrome-extension/blob/main/LICENSE">
+        <img src="https://img.shields.io/github/license/SWCapstone2021/chrome-extension"/>
     </a> <br/>
-    <img src="https://img.shields.io/badge/Nuxt.js-00C58E?style=flat-square&logo=nuxt.js&logoColor=white"/>
     <img src="https://img.shields.io/badge/Built with Firebase-FFCA28?style=flat-square&logo=Firebase&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Vue-4FC08D?style=flat-square&logo=Vue-dot-js&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Vuetify-1867C0?style=flat-square&logo=Vuetify&logoColor=white"/>
+    <img src="https://img.shields.io/badge/chrome extentions-4285F4?style=flat-square&logo=Google-chrome&logoColor=white"/>
 </p>
 <p align="center">
   <a href="#tutorial">Tutorial</a></a> • 
