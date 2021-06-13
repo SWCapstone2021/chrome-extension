@@ -79,7 +79,7 @@
 
 ## System Structure
 
-![systemStructure](pics/systemStructure.png)
+![systemStructure](pics/4F44C0F3-9DA8-42B4-B96C-04DC24A068E5.png)
 
 
 
