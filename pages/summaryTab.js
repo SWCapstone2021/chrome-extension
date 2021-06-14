@@ -24,10 +24,27 @@ function renderURL(statusText) {
 getCurrentTabUrl(function (url) {
     renderURL(url);
     var click = false;
+    
+
+
     document.getElementById("btn_sum").onclick = function () {
         var summarize =""
         if(user_membership=="PRO"){
             if(!click){
+                $.post(`https://findyouu.xyz/api/ml/freq`, { "video_id": [videoID] }, function (data) {
+                    if (data.result[0].credibility == 'No subs') {
+                        var result = document.getElementById('result');
+                        var script = document.createElement('a');
+                        script.id = 'script';
+                        script.style = "margin:20px;font-size: 15px;font-family: Segoe UI;"
+                        script.innerText = 'No Subs';
+                        result.appendChild(script);
+                    }
+                    else {
+                        $.post(`https://findyouu.xyz/api/scripts/load`, { "video_id": videoID }, function (data) { })
+                    }
+                });
+
                 $.post(`https://findyouu.xyz/api/ml/summarization`, { "video_id": videoID }, function (data) {
                     summarize = data.summarization;
                     var result = document.getElementById('result');

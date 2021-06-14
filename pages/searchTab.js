@@ -29,6 +29,8 @@ function renderURL(statusText) {
 getCurrentTabUrl(function (url) {
     renderURL(url);
     var search = false;
+    $.post(`https://findyouu.xyz/api/scripts/load`,{"video_id":videoID},function(data){
+    })
     document.getElementById("btn_add").onclick = function () {
 
             if (search) {
@@ -40,7 +42,7 @@ getCurrentTabUrl(function (url) {
                     }
                 }
             }
-
+            console.log("Video_ID: " + videoID)
             var myList = document.getElementsByClassName('myList');
             var keyword = document.getElementById("txt_add").value;
 
@@ -51,7 +53,7 @@ getCurrentTabUrl(function (url) {
                     $.post(`https://findyouu.xyz/api/scripts/find-word`, { "video_id": videoID, "keyword": keyword }, function (data) {    
                     var data = data.result;
                         console.log(data)
-                        if(data == null){
+                        if(data.length == 0){
                             var item = document.createElement('li');
                             item.id = 'item'
                             var span = document.createElement('span');
@@ -115,7 +117,9 @@ getCurrentTabUrl(function (url) {
                 if (keyword != "") {
                     //keyword 보내고 결과 받아야!!
                     $.post(` https://findyouu.xyz/api/ml/association`, { "video_id": videoID, "keyword": keyword }, function (data) {
-                        if (data == null) {
+                        var data = data.result;
+                        console.log(data)
+                        if (data.length == 0) {
                             var item = document.createElement('li');
                             item.id = 'item'
                             var span = document.createElement('span');
@@ -127,7 +131,6 @@ getCurrentTabUrl(function (url) {
                             myList[0].appendChild(item);
                         }
                         for (var i = 0; i < data.length; i++) {
-                            var data = data.result;
                             var item = document.createElement('li');
                             item.id = 'item'
                             var span = document.createElement('span');
@@ -178,9 +181,8 @@ getCurrentTabUrl(function (url) {
             else if (search_option == 'Query' && user_membership == "PRO") {
                 if (keyword != "") {
                     //keyword 보내고 결과 받아야!!
-                    
                     $.post(`https://findyouu.xyz/api/ml/qa`, { "video_id": videoID, "question": keyword }, function (data) {
-                        if (data == null) {
+                        if (data.length == 0) {
                             var item = document.createElement('li');
                             item.id = 'item'
                             var span = document.createElement('span');
@@ -238,6 +240,9 @@ getCurrentTabUrl(function (url) {
 
                     before_document = document
                 }
+            }
+            else if ((search_option == "Query" || search_option =="Related Keyword")&&user_membership=="FREE"){
+                alert("Need to Subscribe!");
             }
             search = true;
         }

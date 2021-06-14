@@ -217,7 +217,7 @@ var interval = setInterval(function () {
                     node.style.color = "black";
                     node.style.fontWeight = "900";
                 }
-                var textnode = document.createTextNode(`신뢰도 ${data.result[i].credibility}`);
+                var textnode = document.createTextNode(`신뢰도 ${data.result[i].credibility}/10`);
             }
             console.log("INSIDE START : "+ start)
             if (!metatags[i+begin].innerText.includes("신뢰도") && !metatags[i+begin].innerText.includes('No subs')) {
@@ -231,10 +231,11 @@ var interval = setInterval(function () {
     }, "json");
 
     chrome.runtime.reload();
-}, 2000);
+}, 500);
 
 function main(url) {
         console.log("USER CHECK : " + user)
+        
         var a = document.querySelector('ytd-search')
         if (user != "NULL" && a ) {
             interval;
@@ -242,7 +243,7 @@ function main(url) {
 
         //사이드 버튼 처리
         if (url.substring(0, 29) == 'https://www.youtube.com/watch') {
-            clearInterval(interval)
+            //clearInterval(interval)
             var intabResult = [];
             var tabopen = document.getElementById('tab_frame');
             var intab = document.getElementById('innerTab')

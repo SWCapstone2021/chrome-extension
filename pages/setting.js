@@ -1,5 +1,5 @@
 var userInfo = localStorage.getItem("User");
-var membershipInfo = localStorage.getItem("Current membership");
+var membershipInfo = localStorage.getItem("membership");
 var app = {
 
     init: function() {
