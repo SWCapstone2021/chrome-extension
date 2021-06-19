@@ -1,4 +1,6 @@
-test('chrome api events', () => {
+import {chrome} from 'jest-chrome'
+
+test('message sending check', () => {
     const listenerSpy = jest.fn()
     const sendResponseSpy = jest.fn()
 
