@@ -1,0 +1,29 @@
+{
+  "name": "sidebar",
+  "version": "1.0.0",
+  "description": "<p align=\"center\">\r     <img src=\"pics/logo-com.svg\"/>\r </p>\r <h4 align=\"center\">스크립트 기반 영상 검색 및 요약 서비스</h4>\r <p align=\"center\">\r     <a href=\"https://github.com/SWCapstone2021/chrome-extension/actions/workflows/main.yml\">\r         <img src=\"https://github.com/SWCapstone2021/chrome-extension/actions/workflows/main.yml/badge.svg\"/>\r     </a> \r     <a href=\"https://github.com/SWCapstone2021/chrome-extension/issues\">\r         <img src=\"https://img.shields.io/github/issues/SWCapstone2021/chrome-extension\"/>\r     </a>\r     <a href=\"https://github.com/SWCapstone2021/chrome-extension/pulls\">\r         <img src=\"https://img.shields.io/github/forks/SWCapstone2021/chrome-extension\"/>\r     </a>\r     <a href=\"https://github.com/SWCapstone2021/chrome-extension/stargazers\">\r         <img src=\"https://img.shields.io/github/stars/SWCapstone2021/chrome-extension\"/>\r     </a>\r     <a href=\"https://github.com/SWCapstone2021/chrome-extension/blob/main/LICENSE\">\r         <img src=\"https://img.shields.io/github/license/SWCapstone2021/chrome-extension\"/>\r     </a> <br/>\r     <img src=\"https://img.shields.io/badge/Built with Firebase-FFCA28?style=flat-square&logo=Firebase&logoColor=white\"/>\r     <img src=\"https://img.shields.io/badge/chrome extentions-4285F4?style=flat-square&logo=Google-chrome&logoColor=white\"/>\r </p>\r <p align=\"center\">\r   <a href=\"#tutorial\">Tutorial</a></a> • \r   <a href=\"#features\">Features</a> •  \r   <a href=\"#system-structure\">System Structures</a> • \r   <a href=\"#contributor\">Contributors</a> • \r   <a href=\"#license\">License</a>\r </p>\r <p align=\"center\">\r     이 프로젝트는 2021 Ajou University Spring SW capston design 과목의 일환으로 진행되었습니다. <br/>\r     이 어플리케이션은 상업적인 목적이 포함되어 있지 않습니다. \r     이 프로젝트는 팀 APC에 의해 개발되었습니다.<br/>\r     해당 레포는 찾아봐유의 크롬 익스텐션 소스코드를 저장하고 있습니다.      \r </p>",
+  "main": "jest.config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "install": "0.13.0",
+    "jest-chrome": "0.7.1"
+  },
+  "devDependencies": {
+    "jest": "27.0.4"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SWCapstone2021/chrome-extension.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SWCapstone2021/chrome-extension/issues"
+  },
+  "homepage": "https://github.com/SWCapstone2021/chrome-extension#readme"
+}
