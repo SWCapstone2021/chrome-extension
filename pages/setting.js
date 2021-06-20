@@ -13,7 +13,7 @@ var app = {
             $selection_search.innerHTML="Please Log In First!"
         }
         else{
-            if(membershipInfo=='FREE'){
+            if(membershipInfo=='FREE'||membershipInfo==null){
                 $selection.innerHTML ='<option value="Keyword">Keyword</option>'
             }
             else{
