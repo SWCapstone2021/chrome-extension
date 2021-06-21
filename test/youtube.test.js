@@ -40,3 +40,43 @@ test('message with callback test', () => {
     )
     expect(callbackSpy).toBeCalledWith(response)
 })
+
+test('Not Log In', () => {
+    const message = { greeting: 'hello?' }
+    const response = { greeting: 'here I am' }
+    const callbackSpy = jest.fn()
+
+    chrome.runtime.sendMessage.mockImplementation(
+        (message, callback) => {
+            callback(response)
+        },
+    )
+
+    chrome.runtime.sendMessage(message, callbackSpy)
+
+    expect(chrome.runtime.sendMessage).toBeCalledWith(
+        message,
+        callbackSpy,
+    )
+    expect(callbackSpy).toBeCalledWith(response)
+})
+
+test('Membership Free', () => {
+    const message = { greeting: 'hello?' }
+    const response = { greeting: 'here I am' }
+    const callbackSpy = jest.fn()
+
+    chrome.runtime.sendMessage.mockImplementation(
+        (message, callback) => {
+            callback(response)
+        },
+    )
+
+    chrome.runtime.sendMessage(message, callbackSpy)
+
+    expect(chrome.runtime.sendMessage).toBeCalledWith(
+        message,
+        callbackSpy,
+    )
+    expect(callbackSpy).toBeCalledWith(response)
+})
